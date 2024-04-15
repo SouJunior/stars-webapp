@@ -124,6 +124,14 @@ const router = createRouter({
         }
     },
     {
+      path: '/search',
+      name: 'search',
+      component: () => import('../views/user/SearchView.vue'),
+        meta : {
+            auth: false 
+        }
+    },
+    {
       path: '/about',
       name: 'about',
       component: () => import('../views/AboutView.vue')

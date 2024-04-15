@@ -3,9 +3,8 @@
     <v-app-bar class="header" color="transparent" app elevation="4">
       <div class="w-100 d-flex align-center justify-space-between main-container">
         <a class="d-flex align-center logo" @click="navigateToHome">
-          <v-img height="36" width="36" :src="imgUrl" alt="Logo SouJunior" />
           <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
-            SouJunior Labs
+            SouJunior: Stars 
           </h1>
         </a>
         <div class="d-flex align-center ga-2">
@@ -44,20 +43,27 @@
           >
             Registro
           </v-btn> -->
-          <v-btn
+          <!--v-btn
             v-if="logged === false"
             variant="text"
             class="font-weight-semibold"
             :to="{ name: 'login' }"
           >
             Login
+          </v-btn-->
+          <v-btn
+            variant="text"
+            class="font-weight-semibold"
+            :to="{ name: 'registry' }"
+          >
+           Registro 
           </v-btn>
           <v-btn
             variant="text"
             class="font-weight-semibold"
-            :to="{ name: 'products' }"
+            :to="{ name: 'search' }"
           >
-            Produtos
+           Pesquise 
           </v-btn>
           <v-menu v-if="logged === true" open-on-hover>
             <template #activator="{ props }">

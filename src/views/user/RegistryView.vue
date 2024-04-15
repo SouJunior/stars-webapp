@@ -4,9 +4,8 @@
       <v-col cols="6" align="center">
         <label class="d-flex align-center justify-center">
           <a class="d-flex align-center logo">
-            <v-img height="36" width="36" :src="imgUrl" alt="Logo SouJunior" />
             <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
-              SouJunior Labs
+              Registro no projeto SouJunior 
             </h1>
           </a>
         </label>
@@ -17,8 +16,8 @@
         <v-stepper v-model="step" :items="items" hide-actions>
           <template #item.1>
             <p class="mt-6">
-              Olá você acaba de ser convidado para o painel administrativo da
-              <strong color="primary">SouJunior Labs</strong>, para prosseguir será necessário se
+              Olá, você quer participar do SouJunior ?
+              Para prosseguir será necessário se
               cadastrar.
             </p>
             <v-col align="center" class="mt-6">
@@ -31,20 +30,19 @@
           <template #item.2>
             <v-form>
               <v-text-field
-                v-model="applicant.register_token"
-                class="pt-1"
-                label="Token"
-                variant="outlined"
-                hint="O Token foi  encaminhado através do canal Founders no Discord. Caso precise de ajude, entre em contato conosco através do discord."
-              >
-              </v-text-field>
-              <v-text-field
                 v-model="applicant.name"
                 label="Digite seu nome completo."
-                placeholder="Ex: Jonatas de Souza"
+                placeholder="Ex: Junior da Silva"
                 variant="outlined"
               >
               </v-text-field>
+
+              <v-text-field
+                label="Linkedin"
+                placeholder="Ex: https://www.linkedin.com/in/wouerner/"
+                variant="outlined"
+              />
+
               <v-text-field
                 v-model="applicant.email"
                 label="Digite seu e-mail."
@@ -53,23 +51,16 @@
                 :rules="emailRules"
               >
               </v-text-field>
-              <v-text-field
-                v-model="applicant.password"
-                label="Digite sua senha."
-                variant="outlined"
-                :rules="passwordRules"
-              >
-              </v-text-field>
-              <v-text-field
-                v-model="applicant.confirmPassword"
-                label="Confirme sua senha."
-                variant="outlined"
-                :rules="passwordRules"
-              >
-              </v-text-field>
+
+              <v-select
+                  label="Cargo no projeto"
+                  variant="outlined"
+                  :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                  ></v-select>
+
               <v-checkbox
                 v-model="applicant.terms"
-                label="Eu concordo com os termos e condições."
+                label="Eu declaro as informações verdadeiras e autorizo a SouJunior a entrar em contato comigo."
                 @click="dialog = true"
               ></v-checkbox>
               <v-row>
@@ -82,21 +73,10 @@
           </template>
           <template #item.3>
             <p class="mt-6">
-              Meus parabéns, conta criada com sucesso, clique em continuar para ser redirecionado
-              para a pagina de login.
+              Meus parabéns, seu registro foi feito com sucesso, você receberá um e-mail de confirmação em breve. 
             </p>
-            <v-col align="center" class="mt-6">
-              <v-btn color="primary" :to="{ name: 'login' }">Continuar</v-btn>
-            </v-col>
           </template>
         </v-stepper>
-      </v-col>
-      <v-col cols="7" class="mt-6">
-        <v-card v-if="step === 1" class="pa-6" outlined color="#325F4B"
-          >No momento, o cadastro esta liberado apenas para os founders dos projetos já ativos. Mas
-          em breve esperamos ter todos por aqui. Se você é founder, confira o token de acesso no
-          canal do Discord exclusivo para os founders.</v-card
-        >
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" max-width="600">
@@ -104,9 +84,9 @@
         <v-card-title>Termos e Condições</v-card-title>
         <v-card-text>
           <p>
-            Todas as participações no SouJunior Labs são VOLUNTÁRIAS, não remuneradas e sem qualquer
+            Todas as participações no SouJunior são VOLUNTÁRIAS, não remuneradas e sem qualquer
             vínculo empregatício. As participações visam, unicamente, servir de experiência ao
-            voluntário que também contribuirá com o crescimento do projeto. A SouJunior Labs não
+            voluntário que também contribuirá com o crescimento do projeto. A SouJunior não
             garante vaga de trabalho à pessoa voluntária, embora exista a possibilidade de que
             receba convites para oportunidades em empresas parceiras, externas e/ou recrutadores.
           </p>
@@ -137,13 +117,10 @@ const items = [
   { step: 3, title: '' }
 ]
 const applicant = reactive({
-  register_token: '',
   name: '',
+  linkedin: '',
   email: '',
-  password: '',
-  confirmPassword: '',
   terms: false,
-  linkedin: 'linkedin.com/in/'
 })
 
 const nextStep = () => {
@@ -153,11 +130,6 @@ const nextStep = () => {
 const emailRules = [
   (v) => !!v || 'E-mail é obrigatório',
   (v) => /.+@.+\..+/.test(v) || 'E-mail deve ser válido'
-]
-
-const passwordRules = [
-  (v) => !!v || 'Senha é obrigatória',
-  (v) => v.length >= 8 || 'Senha deve ter no mínimo 8 caracteres'
 ]
 
 const resetForm = () => {
@@ -173,11 +145,8 @@ const resetForm = () => {
 const submitApplicant = async () => {
   const newApplicant = { ...applicant }
   if (
-    !newApplicant.register_token ||
     !newApplicant.name ||
-    !newApplicant.email ||
-    !newApplicant.password ||
-    !newApplicant.confirmPassword
+    !newApplicant.email
   ) {
     return alert('Preencha todos os campos')
   } else if (newApplicant.password !== newApplicant.confirmPassword) {
@@ -188,10 +157,10 @@ const submitApplicant = async () => {
     return alert('Usuário cadastrado!')
   } else {
     try {
-      await userStore.register(newApplicant)
-      if (userStore.registered === true) {
+   //   await userStore.register(newApplicant)
+    //  if (userStore.registered === true) {
         nextStep()
-      }
+     // }
     } catch (error) {
       console.error(error.message)
     }
