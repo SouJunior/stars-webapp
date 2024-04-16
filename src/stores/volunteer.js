@@ -4,6 +4,7 @@ import { ref } from 'vue'
 
 export const useVolunteerStore = defineStore('volunteer', () => {
     const member = ref([]);
+    const volunteer = ref([]);
 
     async function fetch(uuidSquad) {
         try {
@@ -15,6 +16,22 @@ export const useVolunteerStore = defineStore('volunteer', () => {
                 return;
             } else {
                 member.value = data
+            }
+        } catch (error) {
+            alert('Catch: ' + error)
+        }
+    }
+
+    async function fetchByEmail(email) {
+        try {
+            const response = await volunteerService.fetchByEmail(email);
+            const data = response;
+
+            if (data.error) {
+                alert(data.error)
+                return;
+            } else {
+                volunteer.value = data
             }
         } catch (error) {
             alert('Catch: ' + error)
@@ -69,11 +86,12 @@ export const useVolunteerStore = defineStore('volunteer', () => {
     }
 
     return { 
-        member, 
+        volunteer, 
         fetch,
         create,
         update,
-        del
+        del,
+        fetchByEmail
     }
 }, 
     { 

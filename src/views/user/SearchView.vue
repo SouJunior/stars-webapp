@@ -4,27 +4,26 @@
       <v-col cols="6" align="center">
             <v-form>
               <v-text-field
-                label="Pesquise seu email"
-                placeholder="Ex: example@teste.com"
-                variant="outlined"
-              >
-              </v-text-field>
+                      v-model="email.value"
+                      placeholder="Ex: example@teste.com"
+                      label="Pesquise seu email"
+                      :loading="loading"
+                      append-inner-icon="mdi-magnify"
+                      variant="outlined"
+                      hide-details
+                      single-line
+                      @click:append-inner="onClick"
+                      ></v-text-field>
           </v-form>
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
       <v-col cols="6" align="center">
-          <v-card align="left">
-              Nome: <strong>Junior da Silva</strong>
-                <br>
-                Linkedin: <strong>https://www.linkedin.com/in/wouerner/</strong>
-                <br>
-                Email: <strong>wou@gmail.com</strong>
-                <br>
-                Cargo: <strong>Desenvolvedor</strong>
-                <br>
-                Status: <strong>Ativo</strong>
-                
+          <v-card align="left" class="pa-4">
+              <p class="pa-1">Nome: <strong>{{volunteerStore.volunteer.name}}</strong></p>
+              <p class="pa-1"> Linkedin: <strong>{{volunteerStore.volunteer.linkedin}}</strong></p>
+              <p class="pa-1"> Cargo: <strong>{{job.title}}</strong></p>
+              <p class="pa-1">Status: <strong>  <v-chip v-if="volunteerStore.volunteer.is_active">Ativo</v-chip></strong></p>
           </v-card>
       </v-col>
     </v-row>
@@ -32,30 +31,33 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-import { useUserStore } from '@/stores/user.js'
-import imgUrl from '@/assets/logo-green-transparent.png'
+import { reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useVolunteerStore } from '@/stores/volunteer.js'
+import { useJobtitleStore } from '@/stores/jobtitle.js'
 
 const $router = useRouter()
 
-const userStore = useUserStore()
+const volunteerStore = useVolunteerStore()
+const jobtitleStore = useJobtitleStore()
+jobtitleStore.fetchJobtitles()
 
-const step = ref(1)
-const items = [
-  { step: 1, title: '' },
-  { step: 2, title: '' },
-  { step: 3, title: '' }
-]
-const applicant = reactive({
-  name: '',
-  linkedin: '',
-  email: '',
-  terms: false,
+const job = computed( () => {
+    if (jobtitleStore.data.length === 0) return ''
+    if (volunteerStore.volunteer.length === 0) return ''
+
+    const d = jobtitleStore.data.filter(x => x.id === volunteerStore.volunteer.jobtitle_id)
+    return d.length > 0 ? d[0] : ''
 })
 
-const nextStep = () => {
-  step.value++
+
+const email = reactive({
+  value: '',
+})
+
+const onClick = () => {
+    console.log('click', email)
+    volunteerStore.fetchByEmail(email.value)
 }
 
 const emailRules = [
@@ -63,106 +65,4 @@ const emailRules = [
   (v) => /.+@.+\..+/.test(v) || 'E-mail deve ser válido'
 ]
 
-const resetForm = () => {
-  applicant.register_token = ''
-  applicant.name = ''
-  applicant.email = ''
-  applicant.password = ''
-  applicant.confirmPassword = ''
-  applicant.terms = false
-  step.value = 1
-}
-
-const submitApplicant = async () => {
-  const newApplicant = { ...applicant }
-  if (
-    !newApplicant.name ||
-    !newApplicant.email
-  ) {
-    return alert('Preencha todos os campos')
-  } else if (newApplicant.password !== newApplicant.confirmPassword) {
-    return alert('As senhas não conferem')
-  } else if (!newApplicant.terms) {
-    return alert('Você precisa concordar com os termos e condições!')
-  } else if (userStore.registered === true) {
-    return alert('Usuário cadastrado!')
-  } else {
-    try {
-   //   await userStore.register(newApplicant)
-    //  if (userStore.registered === true) {
-        nextStep()
-     // }
-    } catch (error) {
-      console.error(error.message)
-    }
-  }
-}
-
-const cancelForm = () => {
-  if (confirm('Você deseja mesmo cancelar esta ação?')) {
-    resetForm()
-    $router.push({ name: 'home' })
-  }
-}
-
-const dialog = ref(false)
-
-const acceptTerms = () => {
-  applicant.terms = true
-  dialog.value = false
-}
-
-const rejectTerms = () => {
-  applicant.terms = false
-  dialog.value = false
-}
 </script>
-
-<style scoped>
-.primary-color {
-  color: #06d7a0;
-}
-
-.logo {
-  cursor: pointer;
-  transition: ease-in-out 0.2s;
-
-  &:hover {
-    filter: brightness(1.25);
-    transition: ease-in-out 0.2s;
-  }
-}
-
-.logo-text {
-  font-family: 'Radio Canada', serif !important;
-}
-
-p {
-  font-size: 18px;
-}
-
-.v-text-field {
-  padding-bottom: 10px;
-}
-
-.v-stepper {
-  box-shadow: none;
-}
-
-.v-stepper :deep(.v-stepper-header) {
-  box-shadow: none;
-}
-.v-stepper :deep(.v-stepper-item__avatar) {
-  margin-inline-end: 0;
-}
-
-.cancelButton {
-  border: 1px solid #62d4a4;
-  color: #325f4b;
-}
-
-.cancelButton:hover {
-  background-color: #325f4b;
-  color: #fff;
-}
-</style>

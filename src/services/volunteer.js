@@ -31,6 +31,27 @@ async function fetchBy(uuidSquad) {
     }
 }
 
+async function fetchByEmail(email) {
+    try {
+        const response = await axiosInstance.get(
+            '/volunteer/' + email, 
+            { headers: headers() }
+        );
+
+        const data = response.data;
+
+        if (data.error) {
+            alert(data.error)
+            return;
+        } else {
+            return data
+        }
+    }
+    catch (error) {
+        alert(error)
+    }
+}
+
 async function create(volunteer) {
     console.log('volunteer :', volunteer);
     try {
@@ -101,5 +122,6 @@ export default {
     fetchBy,
     del,
     create, 
-    update
+    update,
+    fetchByEmail
 };
