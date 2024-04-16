@@ -23,7 +23,7 @@ const vuetify = createVuetify({
 			myTheme: {
 				dark: savedTheme == 'light' ? false : true,
 				colors: {
-					primary: '#62D4A4',
+					primary: '#007aff',
                     background: "#212121",
 				}
 			}

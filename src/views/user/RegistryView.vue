@@ -38,6 +38,7 @@
               </v-text-field>
 
               <v-text-field
+                v-model="applicant.linkedin"
                 label="Linkedin"
                 placeholder="Ex: https://www.linkedin.com/in/wouerner/"
                 variant="outlined"
@@ -53,9 +54,12 @@
               </v-text-field>
 
               <v-select
+                  v-model="applicant.jobtitle_id"
                   label="Cargo no projeto"
                   variant="outlined"
-                  :items="['California', 'Colorado', 'Florida', 'Georgia', 'Texas', 'Wyoming']"
+                  item-text="title"
+                  item-value="id"
+                  :items="jobTitleStore.data"
                   ></v-select>
 
               <v-checkbox
@@ -105,10 +109,16 @@ import { ref, reactive } from 'vue'
 import { useUserStore } from '@/stores/user.js'
 import imgUrl from '@/assets/logo-green-transparent.png'
 import { useRouter } from 'vue-router'
+import { useVolunteerStore } from '@/stores/volunteer.js'
+import { useJobtitleStore } from '@/stores/jobtitle.js'
 
 const $router = useRouter()
 
 const userStore = useUserStore()
+const volunteerStore = useVolunteerStore()
+const jobTitleStore = useJobtitleStore()
+
+jobTitleStore.fetchJobtitles()
 
 const step = ref(1)
 const items = [
@@ -120,6 +130,7 @@ const applicant = reactive({
   name: '',
   linkedin: '',
   email: '',
+  jobtitle: '',
   terms: false,
 })
 
@@ -157,7 +168,7 @@ const submitApplicant = async () => {
     return alert('Usuário cadastrado!')
   } else {
     try {
-   //   await userStore.register(newApplicant)
+      await volunteerStore.create(newApplicant)
     //  if (userStore.registered === true) {
         nextStep()
      // }
