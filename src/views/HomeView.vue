@@ -161,7 +161,7 @@
             <a class="d-flex align-center logo">
               <v-img height="36" width="36" :src="logo_white" alt="Logo SouJunior" />
               <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
-                SouJunior Labs
+                SouJunior
               </h1>
             </a>
           </div>
@@ -357,7 +357,6 @@ const teamMembers = [
 .hero-section h1 {
   font-family: 'Radio Canada', sans-serif;
   font-size: 64px;
-  color: #06d7a0;
   margin-bottom: 20px;
 }
 .hero-section p {

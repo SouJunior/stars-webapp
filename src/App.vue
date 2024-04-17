@@ -143,10 +143,6 @@ function toggleTheme() {
 </script>
 
 <style lang="scss">
-.homeBackgroundEffect {
-  background-image: url('/src/assets/home/homeBackground.png');
-  background-size: cover;
-}
 
 .header {
   backdrop-filter: blur(10px);
@@ -164,9 +160,6 @@ function toggleTheme() {
   }
 }
 
-.primary-color {
-  color: #06d7a0;
-}
 
 .logo {
   cursor: pointer;
