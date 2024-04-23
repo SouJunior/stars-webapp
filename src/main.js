@@ -44,7 +44,7 @@ app.use(router);
 app.use(vuetify);
 	
 app.use(VueGtag, {
-    config: { id: "G-5F4LFMZQK6" }
+    config: { id: "G-Z322K0TK90" }
 });
 
 app.mount('#app');
