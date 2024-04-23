@@ -26,7 +26,7 @@
 						class="mr-8 cursor-pointer"
 						@click="toggleTheme"
 					/-->
-          <v-btn variant="text" class="font-weight-semibold" :to="{ name: 'home' }"> Home </v-btn>
+          <!-- v-btn variant="text" class="font-weight-semibold" :to="{ name: 'home' }"> Home </v-btn-->
           <v-btn
             v-if="logged === true"
             variant="text"

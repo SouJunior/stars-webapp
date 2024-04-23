@@ -12,7 +12,9 @@
                       variant="outlined"
                       hide-details
                       single-line
+                      clearable
                       @click:append-inner="onClick"
+                      @keydown.enter.prevent="onClick" 
                       ></v-text-field>
           </v-form>
       </v-col>

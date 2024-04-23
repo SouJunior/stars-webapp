@@ -40,15 +40,16 @@ async function fetchByEmail(email) {
 
         const data = response.data;
 
-        if (data.error) {
-            alert(data.error)
-            return;
-        } else {
+        // if (data.error) {
+        //     alert(data.error)
+        //     return;
+        // } else {
             return data
-        }
+        // }
     }
-    catch (error) {
-        alert(error)
+    catch (error) { 
+        console.log('error :', error);
+        return error.response
     }
 }
 

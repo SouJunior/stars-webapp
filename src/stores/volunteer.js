@@ -26,13 +26,15 @@ export const useVolunteerStore = defineStore('volunteer', () => {
         try {
             const response = await volunteerService.fetchByEmail(email);
             const data = response;
+            console.log('data :', data);
 
-            if (data.error) {
-                alert(data.error)
+            if (data.status === 404) {
+                alert('Volunteer não encontrado')
                 return;
-            } else {
-                volunteer.value = data
             }
+
+            volunteer.value = data
+           
         } catch (error) {
             alert('Catch: ' + error)
         }

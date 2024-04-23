@@ -79,6 +79,9 @@
             <p class="mt-6">
               Meus parabéns, seu registro foi feito com sucesso, você receberá um e-mail de confirmação em breve. 
             </p>
+            <p class="mt-6">
+               Agora você pode pesquisar seu email e ver o andamento do cadastro <v-btn color="primary" :to="{ name: 'search'}">Pesquisar</v-btn>
+            </p>
           </template>
         </v-stepper>
       </v-col>
