@@ -4,7 +4,7 @@
       <v-col cols="6" align="center">
         <label class="d-flex align-center justify-center">
           <a class="d-flex align-center logo">
-            <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
+            <h1 class="text-h5 font-weight-bold font-semibold ml-3 logo-text">
               Registro no projeto SouJunior 
             </h1>
           </a>

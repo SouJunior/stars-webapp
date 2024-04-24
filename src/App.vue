@@ -2,7 +2,7 @@
   <v-app :class="ef">
     <v-app-bar class="header" color="transparent" app elevation="4">
       <div class="w-100 d-flex align-center justify-space-between main-container">
-        <a class="d-flex align-center logo" @click="navigateToHome">
+        <a class="d-flex align-center logo">
           <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
             SouJunior: Stars 
           </h1>
