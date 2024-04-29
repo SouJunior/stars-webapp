@@ -1,26 +1,26 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row align="center" justify="center">
-      <v-col cols="6" align="center">
-            <v-form>
-              <v-text-field
-                      v-model="email.value"
-                      placeholder="Ex: example@teste.com"
-                      label="Pesquise seu email"
-                      :loading="loading"
-                      append-inner-icon="mdi-magnify"
-                      variant="outlined"
-                      hide-details
-                      single-line
-                      clearable
-                      @click:append-inner="onClick"
-                      @keydown.enter.prevent="onClick" 
-                      ></v-text-field>
-          </v-form>
+      <v-col  xl="6" sm="12"  align="center">
+        <v-form>
+          <v-text-field
+              v-model="email.value"
+              placeholder="Ex: example@teste.com"
+              label="Pesquise seu email"
+              :loading="loading"
+              append-inner-icon="mdi-magnify"
+              variant="outlined"
+              hide-details
+              single-line
+              clearable
+              @click:append-inner="onClick"
+              @keydown.enter.prevent="onClick" 
+              ></v-text-field>
+        </v-form>
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
-      <v-col cols="6" align="center">
+      <v-col xl="6"  sm="12" align="center">
           <v-card align="left" class="pa-4">
               <p class="pa-1">Nome: <strong>{{volunteerStore.volunteer.name}}</strong></p>
               <p class="pa-1"> Linkedin: <strong>{{volunteerStore.volunteer.linkedin}}</strong></p>

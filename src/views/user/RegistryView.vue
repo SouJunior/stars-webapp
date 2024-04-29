@@ -1,7 +1,7 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row align="center" justify="center">
-      <v-col cols="6" align="center">
+      <v-col cols="6" xs="12" align="center">
         <label class="d-flex align-center justify-center">
           <a class="d-flex align-center logo">
             <h1 class="text-h5 font-weight-bold font-semibold ml-3 logo-text">
@@ -12,20 +12,22 @@
       </v-col>
     </v-row>
     <v-row align="center" justify="center">
-      <v-col cols="7">
-        <v-stepper v-model="step" :items="items" hide-actions>
+      <v-col xl="7" sm="12">
+        <v-stepper v-model="step" :items="items" hide-actions mobile>
           <template #item.1>
-            <p class="mt-6">
+            <p class="pa-2">
               Olá, você quer participar do SouJunior ?
               Para prosseguir será necessário se
               cadastrar.
             </p>
-            <v-col align="center" class="mt-6">
-              <v-btn color="primary" @click="nextStep">Continuar</v-btn>
-              <v-btn class="ml-3 cancelButton" :to="{ name: 'home' }" @click="resetForm"
-                >Cancelar</v-btn
-              >
-            </v-col>
+            <v-row align="center" justify="center">
+                <v-col align="center" class="">
+                    <v-btn color="primary" @click="nextStep">Continuar</v-btn>
+                </v-col>
+                <v-col align="center" class="">
+                    <v-btn class="cancelButton" :to="{ name: 'home' }" @click="resetForm">Cancelar</v-btn>
+                </v-col>
+            </v-row>
           </template>
           <template #item.2>
             <v-form>
@@ -70,6 +72,8 @@
               <v-row>
                 <v-col align="center">
                   <v-btn color="primary" @click="submitApplicant">Cadastrar-se</v-btn>
+                </v-col>
+                <v-col align="center">
                   <v-btn class="ml-3 cancelButton" @click="cancelForm">Cancelar</v-btn>
                 </v-col>
               </v-row>

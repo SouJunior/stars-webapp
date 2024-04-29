@@ -3,7 +3,7 @@
     <v-app-bar class="header" color="transparent" app elevation="4">
       <div class="w-100 d-flex align-center justify-space-between main-container">
         <a class="d-flex align-center logo">
-          <h1 class="text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
+          <h1 class=" d-none d-sm-block text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
             SouJunior: Stars 
           </h1>
         </a>
@@ -88,7 +88,7 @@
 
 
     <transition name="fade" mode="out-in">
-      <v-main class="d-flex flex-grow-1 main-container" style="margin-top: 64px">
+      <v-main class="d-flex flex-grow-1 " style="margin-top: 64px">
         <RouterView />
 
     <v-snackbar v-model="snackbarStore.snack.show" v-bind="snackbarStore.snack" location="top right">
