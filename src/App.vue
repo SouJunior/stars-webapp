@@ -1,183 +1,105 @@
-<template>
-  <v-app :class="ef">
-    <v-app-bar class="header" color="transparent" app elevation="4">
-      <div class="w-100 d-flex align-center justify-space-between main-container">
-        <a class="d-flex align-center logo">
-          <h1 class=" d-none d-sm-block text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text">
-            SouJunior: Stars 
-          </h1>
-        </a>
-        <div class="d-flex align-center ga-2">
-          <!--v-icon
-						v-if="currentTheme.dark"
-						variant="text"
-						icon="mdi-weather-night"
-						size="large"
-						color="purple-darken-1"
-						class="mr-8 cursor-pointer"
-						@click="toggleTheme"
-					/-->
-          <!--v-icon
-						v-if="!currentTheme.dark"
-						variant="text"
-						icon="mdi-white-balance-sunny"
-						size="large"
-						color="orange"
-						class="mr-8 cursor-pointer"
-						@click="toggleTheme"
-					/-->
-          <!-- v-btn variant="text" class="font-weight-semibold" :to="{ name: 'home' }"> Home </v-btn-->
-          <v-btn
-            v-if="logged === true"
-            variant="text"
-            class="font-weight-semibold"
-            :to="{ name: 'onboarding' }"
-          >
-            Onboarding
-          </v-btn>
-          <!-- <v-btn
-            v-if="logged === false"
-            variant="text"
-            class="font-weight-semibold"
-            :to="{ name: 'registry' }"
-          >
-            Registro
-          </v-btn> -->
-          <!--v-btn
-            v-if="logged === false"
-            variant="text"
-            class="font-weight-semibold"
-            :to="{ name: 'login' }"
-          >
-            Login
-          </v-btn-->
-          <v-btn
-            variant="text"
-            class="font-weight-semibold"
-            :to="{ name: 'registry' }"
-          >
-           Registro 
-          </v-btn>
-          <v-btn
-            variant="text"
-            class="font-weight-semibold"
-            :to="{ name: 'search' }"
-          >
-           Pesquise 
-          </v-btn>
-          <v-menu v-if="logged === true" open-on-hover>
-            <template #activator="{ props }">
-              <v-btn variant="text" class="font-weight-semibold" v-bind="props">
-                {{ auth.getName() }}
-                <v-icon right>mdi-chevron-down</v-icon>
-              </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item link :to="{ name: 'profile' }">
-                <v-list-item-title>Profile</v-list-item-title>
-              </v-list-item>
-              <v-list-item link @click="auth.logout()">
-                <v-list-item-title>Logout</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </div>
-      </div>
-    </v-app-bar>
+<script setup lang="ts">
+import Aside from "./components/Aside.vue";
+import Header from "./components/Header.vue";
+import CardList from "./components/CardList.vue";
+import { computed, ref } from "vue";
 
 
-    <transition name="fade" mode="out-in">
-      <v-main class="d-flex flex-grow-1 " style="margin-top: 64px">
-        <RouterView />
+// Define o estado reativo
+const isArrowUp = ref(true);
 
-    <v-snackbar v-model="snackbarStore.snack.show" v-bind="snackbarStore.snack" location="top right">
-      {{ text }}
-      <template #actions>
-        <v-btn  variant="text" @click="snackbar = false">
-          Close
-        </v-btn>
-      </template>
-    </v-snackbar>
+// Computa dinamicamente o caminho da seta
+const arrowSrc = computed(() =>
+  isArrowUp.value ? "../public/seta-cima.png" : "../public/seta-baixo.png"
+);
 
-      </v-main>
-    </transition>
-
-
-  </v-app>
-</template>
-
-<script setup>
-import { computed, ref } from 'vue'
-import { useRouter, RouterView, useRoute } from 'vue-router'
-import { useAuthStore } from '@/stores/auth'
-import { useTheme } from 'vuetify'
-import { useSnackbarStore } from '@/stores/snackbar'
-import imgUrl from '@/assets/logo-green-transparent.png'
-
-const router = useRouter()
-const theme = useTheme()
-const snackbarStore = useSnackbarStore()
-
-const currentTheme = computed(() => theme.current.value)
-
-const auth = useAuthStore()
-
-const route = useRoute()
-
-const logged = computed(() => auth.getName() != '')
-
-const productUuid = computed(() => (auth.getName() != '' ? auth.products[0] : false))
-
-console.log('logged', route.path)
-const ef = computed(() => (route.path === '/' ? 'homeBackgroundEffect' : ''))
-
-const navigateToHome = () => {
-  router.push({ name: 'home' })
-}
-
-function toggleTheme() {
-  theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
-  localStorage.setItem('theme', theme.global.name.value)
+// Alterna entre seta para cima e para baixo
+function toggleArrow() {
+  isArrowUp.value = !isArrowUp.value;
 }
 </script>
 
-<style lang="scss">
+<template>
+  <div>
+    <Header />
+    <div class="main-section">
+      <Aside />
+      <div class="cards">
+        <div class="order">
+          <div class="order-select">
+            <div class="select-placeholder" @click="toggleArrow">
+              <p>Classificar por</p>
+              <img :src="arrowSrc" alt="Seta" />
+            </div>
+            <div class="order-options" >
+              <p :class="{ visible: !isArrowUp }">Mais Antigas para Recentes</p>
+              <p :class="{ visible: !isArrowUp }">Mais Recentes para Antigas</p>
+            </div>
+          </div>
+        </div>
+        <CardList />
+      </div>
+    </div>
+  </div>
+</template>
 
-.header {
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
+<style scoped>
+.main-section {
+  display: flex;
+    .cards {
+      padding-right: 32px;
+      width: 100%;
+        
+        .order {
+          display: flex;
+          flex-direction: row-reverse;
+          
+          .order-select {
+            margin: 68px 0px 24px 0px;
+            max-width: 230px;
+            width: 100%;
+            cursor: pointer;
+            
+            .select-placeholder {
+              padding: 4px 8px;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              background-color: var(--secondary-color);
+              width: 100%;
+        
+              img {
+                height: fit-content;
+                max-width: 16px;
+                width: 100%;
+              }
+            }
 
-.main-container {
-  margin-left: 240px;
-  margin-right: 240px;
-  padding: 0;
-
-  @media (max-width: 1600px) {
-    margin-left: 120px;
-    margin-right: 120px;
+            .order-options {
+              padding-right: 32px;
+              padding-left: 97.5px;
+              width: 100%;
+              
+              p {
+                display: none; /* Invisível inicialmente */
+                opacity: 0;
+                transition: opacity 0.3s ease-in-out;
+                padding-left: 4.5px;
+                
+                &.visible {
+                  display: block;
+                  opacity: 1;
+                }
+                &:hover{
+                  background-color: var(--primary-color);
+                  color: var(--secondary-text-color);
+                  transition: .1s;
+                }
+                
+              }
+            }
+          }
+        }
   }
-}
-
-
-.logo {
-  cursor: pointer;
-  transition: ease-in-out 0.2s;
-
-  &:hover {
-    filter: brightness(1.25);
-    transition: ease-in-out 0.2s;
-  }
-}
-
-.drag-none {
-  user-select: none;
-  -moz-drag-over: none;
-  -webkit-user-drag: none;
-}
-
-.logo-text {
-  font-family: 'Radio Canada', serif !important;
 }
 </style>
