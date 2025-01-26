@@ -1,0 +1,61 @@
+<script setup lang="ts">
+import { ref } from "vue";
+import CheckboxList from "./CheckboxList.vue";
+
+  const selectedArea = ref(null);
+  const roles = [
+    'Head',
+    'Mentor',
+    'Junior'
+  ]
+
+  const areas = [
+      'Desenvolvedor Full Stack',
+      'UX/UI Designer',
+      'Product Manager',
+      'Tech Lead',
+      'Agilista',
+      'APM - Produto',
+      'Business',
+      'Data',
+      'Design',
+      'DevOps',
+      'Front-End',
+      'Marketing',
+      'Quality Assurance (QA)',
+      'Scrum Master',
+      'Tech Recruiter',
+      'Social Media'
+    ]
+
+  const subAreas = [
+    "Product Manager",
+    "Product Growth",
+    "Product Operations",
+    "Product Marketing Manager",
+    "Social Media",
+  ];
+
+  const availabilities = [
+    "5h/semanais",
+    "10h/semanais",
+    "15h/semanais",
+    "+15h/semanais",
+  ];
+
+  const periods = ["Manhã", "Tarde", "Noite"];
+</script>
+
+<template>
+  <aside>
+    <CheckboxList :values="roles" :input-type="'radio'"/>
+    <CheckboxList v-model="selectedArea" :label="'ÁREA DE ATUAÇÃO'"  :values="areas" />
+    <CheckboxList v-if="selectedArea === 'Product Manager'" :label="'SUB-ÁREA'" :values="subAreas"/>
+    <CheckboxList :label="'DISPONIBILIDADE'" :values="availabilities"/>
+    <CheckboxList :label="'PERÍODO DE DISPONIBILIDADE'" :values="periods"/>
+  </aside>
+</template>
+
+<style scoped>
+
+</style>

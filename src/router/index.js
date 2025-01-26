@@ -140,8 +140,8 @@ const router = createRouter({
       path: '/404',
       name: 'not-found',
       component: () => import('../views/NotFoundView.vue')
-    }
-  ]
+    },
+  ],
 })
 
 router.beforeEach((to, from, next) => {
