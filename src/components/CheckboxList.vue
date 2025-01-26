@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { PropType } from 'vue';
+
   defineProps({
     values: {
-      type: Array,
+      type: Array as PropType<string[]>,
       required: true
     },
-    modelValue: {
+    label: {
       type: String,
       required: false,
       default: ''
@@ -14,12 +16,11 @@
       required: false,
       default: 'checkbox'
     },
-    label: {
-      type: String,
+    modelValue: {
+      type: String as PropType<string>,
       required: false,
       default: ''
     },
-
   })
 
   const emit = defineEmits(['update:modelValue'])
@@ -33,17 +34,18 @@
 <template>
   <div class="checkboxList">
     <p>{{ label }}</p>
-    <div v-for="(value, index) in values" :key="index">
+    <div v-for="value in values" :key="value">
       <input
-        :id="`input-${index}`"
-        :key="index"
+        :id="`input-${value}`"
+        :key="value"
         :value="value"
         :type="inputType"
         :checked="modelValue === value"
+        :aria-label="value"
         name="value"
         @change="handleChange"
       />
-      <label :for="`input-${index}`">{{ value }}</label>
+      <label :for="`input-${value}`">{{ value }}</label>
     </div>
   </div>
 </template>
