@@ -5,14 +5,15 @@ import { roles, headAreas, juniorAreas, productManagerSubAreas, designSubAreas, 
 
 const selectedArea = ref('')
 const selectedRole = ref('')
+const selectedSubArea = ref('')
+const selectedAvailability = ref('')
+const selectedPeriod = ref('')
 
-// Função para garantir que apenas uma área seja selecionada
+
 const handleAreaSelection = (area: string) => {
   if (selectedArea.value === area) {
-    // Se a área já está selecionada, desmarque-a
     selectedArea.value = ''
   } else {
-    // Caso contrário, selecione a nova área
     selectedArea.value = area
   }
 }
