@@ -1,51 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import CheckboxList from './CheckboxList.vue'
+import { roles, headAreas, juniorAreas, productManagerSubAreas, designSubAreas, dataSubAreas, businessSubAreas, availabilities, periods } from '../config/options'
 
 const selectedArea = ref('')
 const selectedRole = ref('')
-
-const roles = ['Head', 'Mentor', 'Junior']
-
-const headAreas = [
-  'Agilidade',
-  'Back-End',
-  'Business',
-  'Dados',
-  'Design',
-  'DevOps',
-  'Front-End',
-  'Produto',
-  'QA - Quality Assurance',
-  'Tech Recruitment'
-]
-
-const juniorAreas = [
-  'Agilidade',
-  'Back-End',
-  'Business',
-  'Dados',
-  'Design',
-  'DevOps',
-  'Front-End',
-  'Produto',
-  'QA - Quality Assurance',
-  'Social Media',
-  'Tech Recruitment'
-]
-
-const productManagerSubAreas = [
-  'APM - Associate Product Manager',
-  'Product Growth',
-  'Product Marketing Manager',
-  'Product Ops'
-]
-const designSubAreas = ['Design Ops', 'UX/UI']
-const dataSubAreas = ['Analytics', 'BI', 'Engenharia de Dados']
-const businessSubAreas = ['Análise de negócios', 'Análise de processos', 'Outros']
-
-const availabilities = ['5h/semanais', '10h/semanais', '15h/semanais', '+15h/semanais']
-const periods = ['Manhã', 'Tarde', 'Noite']
 
 // Função para garantir que apenas uma área seja selecionada
 const handleAreaSelection = (area: string) => {
@@ -97,7 +56,5 @@ const handleAreaSelection = (area: string) => {
 
     <CheckboxList :label="'DISPONIBILIDADE'" :values="availabilities" />
     <CheckboxList :label="'PERÍODO DE DISPONIBILIDADE'" :values="periods"/>
-
-    <button type="button">Pesquisar</button>
   </aside>
 </template>
