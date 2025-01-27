@@ -1,19 +1,21 @@
 <template>
-  <div>
-    <div
-      v-for="vacancies in vacancies"
-      :key="vacancies.id"
-      class="vacancies-card"
-    >
-      <h3>Produto {{ vacancies.id }}</h3>
-      <p><strong>Cargo:</strong> {{ vacancies.position }}</p>
-      <p><strong>Produto:</strong> {{ vacancies.product }}</p>
-      <p><strong>Data da candidatura:</strong> {{ vacancies.applicationDate }}</p>
-      <p><strong>Candidatos:</strong> {{ vacancies.candidates }}</p>
-      <p><strong>Prioridade da vaga:</strong> {{ vacancies.priority }}</p>
-      <button class="details-btn">Detalhes da vaga</button>
-    </div>
-  </div>
+  <main>
+    <h1 class="sr-only">Lista de Vagas</h1>
+    <section v-if="vacancies.length" aria-label="Lista de vagas disponíveis">
+      <div v-for="vacancy in vacancies" :key="vacancies.id" class="vacancies-card">
+        <h2>Produto {{ vacancy.id }}</h2>
+        <p><strong>Cargo:</strong> {{ vacancy.position }}</p>
+        <p><strong>Produto:</strong> {{ vacancy.product }}</p>
+        <p><strong>Data da candidatura:</strong> {{ vacancy.applicationDate }}</p>
+        <p><strong>Candidatos:</strong> {{ vacancy.candidates }}</p>
+        <p><strong>Prioridade da vaga:</strong> {{ vacancy.priority }}</p>
+        <button class="details-btn" :aria-label="'Ver detalhes da vaga para ' + vacancy.position">
+          Detalhes da vaga
+        </button>
+      </div>
+    </section>
+    <p v-else class="empty-state">Nenhuma vaga disponível no momento.</p>
+  </main>
 </template>
 
 <script>
