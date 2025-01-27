@@ -2,7 +2,7 @@
   <main>
     <h1 class="sr-only">Lista de Vagas</h1>
     <section v-if="vacancies.length" aria-label="Lista de vagas disponíveis">
-      <div v-for="vacancy in vacancies" :key="vacancies.id" class="vacancies-card">
+      <div v-for="vacancy in vacancies" :key="vacancy.id" class="vacancies-card">
         <h2>Produto {{ vacancy.id }}</h2>
         <p><strong>Cargo:</strong> {{ vacancy.position }}</p>
         <p><strong>Produto:</strong> {{ vacancy.product }}</p>
