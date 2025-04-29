@@ -1,4 +1,5 @@
 /* eslint-env node */
+/* @typescript-eslint */
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
@@ -21,5 +22,11 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
+  },
+  "plugins": {
+    "@typescript-eslint": true
+  },
+  "rules": {
+    "@typescript-eslint/explicit-function-return-type": "off"
   }
 }
