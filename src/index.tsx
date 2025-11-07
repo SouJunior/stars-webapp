@@ -23,9 +23,16 @@ const queryClient = new QueryClient({
 })
 
 // Tema customizado (equivalente ao Vuetify theme)
+const getThemeMode = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('theme') === 'light' ? 'light' : 'dark';
+  }
+  return 'dark';
+};
+
 const theme = createTheme({
   palette: {
-    mode: localStorage.getItem('theme') === 'light' ? 'light' : 'dark',
+    mode: getThemeMode(),
     primary: {
       main: '#d7a006'
     },

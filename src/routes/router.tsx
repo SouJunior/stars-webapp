@@ -1,6 +1,6 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
-import { Home } from '../pages';
+import React from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { Home } from '../pages'
 // import { DefaultLayout } from '../layouts/DefaultLayout';
 // import { LoginLayout } from '../layouts/LoginLayout';
 
@@ -20,10 +20,26 @@ import { Home } from '../pages';
 
 // Loading component
 const LoadingComponent: React.FC = () => (
-  <div className="flex items-center justify-center min-h-screen">
-    <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
+  <div
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh'
+    }}
+  >
+    <div
+      style={{
+        width: '32px',
+        height: '32px',
+        border: '2px solid #f3f3f3',
+        borderTop: '2px solid #62d4a4',
+        borderRadius: '50%',
+        animation: 'spin 1s linear infinite'
+      }}
+    ></div>
   </div>
-);
+)
 
 // Router principal
 const NavRoutes: React.FC = () => {
@@ -31,7 +47,7 @@ const NavRoutes: React.FC = () => {
     <React.Suspense fallback={<LoadingComponent />}>
       <Routes>
         <Route path="/" element={<Home />} />
-          {/* Rotas com DefaultLayout */}
+        {/* Rotas com DefaultLayout */}
         {/*
          <Route element={<DefaultLayout />}>
           <Route index element={<Home />} />
@@ -59,7 +75,7 @@ const NavRoutes: React.FC = () => {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </React.Suspense>
-  );
-};
+  )
+}
 
-export default NavRoutes;
+export default NavRoutes
