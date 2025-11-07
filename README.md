@@ -1,5 +1,12 @@
 # salvando-labs
 
+## Migração para React 
+
+### Detalhes sobre a migração:
+
+- Iniciada no branch `migration-to-react`
+- Passo a passo (gerado por IA) para migração no arquivo `README_migration_to_react.md`
+
 This template should help get you started developing with Vue 3 in Vite.
 
 ## Recommended IDE Setup

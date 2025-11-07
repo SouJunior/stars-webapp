@@ -1,16 +1,32 @@
-import { fileURLToPath, URL } from 'node:url'
+import { defineConfig } from 'vite';
+import commonjs from 'vite-plugin-commonjs';
+import react from '@vitejs/plugin-react-swc';
+import svgr from 'vite-plugin-svgr';
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
-
-// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
-  }
-})
+    base: '/',
+    plugins: [commonjs(), react(), svgr()],
+    resolve: {
+        alias: {
+            '@': fileURLToPath(new URL('./src', import.meta.url))
+        }
+    },
+    build: {
+        outDir: 'build',
+        assetsDir: 'assets',
+        sourcemap: true,
+    },
+    server: {
+        port: 3000,
+        host: true,
+        open: true
+    },
+    test: {
+        globals: true,
+        environment: 'jsdom',
+        setupFiles: './src/setupTests.tsx',
+        css: true,
+        reporters: ['verbose'],
+    },
+});
