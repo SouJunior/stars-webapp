@@ -92,10 +92,10 @@
 
                 <v-list-item class="px-0">
                   <template #prepend>
-                    <v-icon icon="mdi-briefcase" :color="currentVolunteer.job_title ? 'grey-darken-1' : 'grey'"></v-icon>
+                    <v-icon icon="mdi-briefcase" :color="currentVolunteer.jobtitle ? 'grey-darken-1' : 'grey'"></v-icon>
                   </template>
                   <v-list-item-title>
-                    <span v-if="currentVolunteer.job_title">{{ currentVolunteer.job_title.name }}</span>
+                    <span v-if="currentVolunteer.jobtitle">{{ currentVolunteer.jobtitle.title }}</span>
                     <span v-else class="text-medium-emphasis">sem dados</span>
                   </v-list-item-title>
                   <v-list-item-subtitle>Cargo</v-list-item-subtitle>
@@ -233,6 +233,31 @@
         :loading="isLoadingSquad"
         :disabled="isLoadingSquad"
         @update:model-value="updateVolunteerSquad"
+      ></v-select>
+    </v-card-text>
+  </v-card>
+</v-col>
+
+<!-- Gerenciar Cargo -->
+<v-col v-if="authStore.isHead()" cols="12" md="6">
+  <v-card class="h-100" elevation="2">
+    <v-card-item>
+      <v-card-title class="text-h6">Gerenciar Cargo</v-card-title>
+    </v-card-item>
+    <v-card-text>
+      <p class="text-body-2 mb-4">Atualize o cargo do voluntário.</p>
+      <v-select
+        v-model="selectedJobTitleId"
+        :items="jobTitles"
+        item-title="title"
+        item-value="id"
+        label="Selecione o novo cargo"
+        variant="outlined"
+        color="primary"
+        hide-details
+        :loading="isLoadingJobTitle"
+        :disabled="isLoadingJobTitle"
+        @update:model-value="updateVolunteerJobTitle"
       ></v-select>
     </v-card-text>
   </v-card>
@@ -740,6 +765,7 @@ import { useVolunteerStore } from '@/stores/volunteer.js'
 import { useSquadStore } from '@/stores/squad.js'
 import { useVolunteerTypeStore } from '@/stores/volunteerType.js'
 import { useVerticalStore } from '@/stores/vertical.js'
+import { useJobtitleStore } from '@/stores/jobtitle.js'
 import volunteerService from '@/services/volunteer.js'
 import feedbackService from '@/services/feedback.js'
 import certificateService from '@/services/certificate.js'
@@ -752,15 +778,18 @@ const volunteerStore = useVolunteerStore()
 const squadStore = useSquadStore()
 const volunteerTypeStore = useVolunteerTypeStore()
 const verticalStore = useVerticalStore()
+const jobtitleStore = useJobtitleStore()
 const authStore = useAuthStore()
 
 const selectedStatusId = ref(null)
 const selectedSquadId = ref(null)
 const selectedTypeId = ref(null)
+const selectedJobTitleId = ref(null)
 const selectedVerticalIds = ref([])
 const isLoadingStatus = ref(false)
 const isLoadingSquad = ref(false)
 const isLoadingType = ref(false)
+const isLoadingJobTitle = ref(false)
 const isLoadingVerticals = ref(false)
 const isCheckingApoiase = ref(false)
 
@@ -1085,6 +1114,7 @@ const statuses = computed(() => volunteerStore.statuses)
 const squads = computed(() => squadStore.squads)
 const volunteerTypes = computed(() => volunteerTypeStore.data)
 const verticals = computed(() => verticalStore.data)
+const jobTitles = computed(() => jobtitleStore.data)
 
 const sortedStatusHistory = computed(() => {
   if (currentVolunteer.value && currentVolunteer.value.status_history) {
@@ -1107,6 +1137,7 @@ const fetchData = async () => {
     squadStore.fetchAllSquads(),
     volunteerTypeStore.fetchVolunteerTypes(),
     verticalStore.fetchVerticals(),
+    jobtitleStore.fetchJobtitles(),
     volunteerStore.fetchVolunteer(volunteerId)
   ])
 
@@ -1114,6 +1145,7 @@ const fetchData = async () => {
     selectedStatusId.value = currentVolunteer.value.status_id
     selectedSquadId.value = currentVolunteer.value.squad_id
     selectedTypeId.value = currentVolunteer.value.volunteer_type_id
+    selectedJobTitleId.value = currentVolunteer.value.jobtitle_id
     selectedVerticalIds.value = currentVolunteer.value.verticals
       ? currentVolunteer.value.verticals.map((v) => v.id)
       : []
@@ -1181,6 +1213,21 @@ const updateVolunteerType = async () => {
       await volunteerStore.updateVolunteerType(currentVolunteer.value.id, selectedTypeId.value)
     } finally {
       isLoadingType.value = false
+    }
+  }
+}
+
+const updateVolunteerJobTitle = async () => {
+  if (
+    selectedJobTitleId.value &&
+    currentVolunteer.value &&
+    selectedJobTitleId.value !== currentVolunteer.value.jobtitle_id
+  ) {
+    isLoadingJobTitle.value = true
+    try {
+      await volunteerStore.updateVolunteerJobTitle(currentVolunteer.value.id, selectedJobTitleId.value)
+    } finally {
+      isLoadingJobTitle.value = false
     }
   }
 }

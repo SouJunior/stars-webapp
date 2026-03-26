@@ -164,6 +164,22 @@ export const useVolunteerStore = defineStore(
       }
     }
 
+    async function updateVolunteerJobTitle(volunteerId, newJobTitleId) {
+      try {
+        await volunteerService.updateJobTitle(volunteerId, newJobTitleId)
+        await fetchVolunteer(volunteerId)
+      } catch (error) {
+        console.error(`Erro ao atualizar cargo do voluntário ${volunteerId}:`, error)
+        let errorMessage = `Erro ao atualizar cargo do voluntário ${volunteerId}.`
+        if (error.response && error.response.data && error.response.data.detail) {
+          errorMessage = error.response.data.detail
+        } else if (error.message) {
+          errorMessage = error.message
+        }
+        throw new Error(errorMessage)
+      }
+    }
+
     async function checkApoiaseStatus(volunteerId) {
       try {
         const updatedVolunteer = await volunteerService.checkApoiaseStatus(volunteerId)
@@ -231,6 +247,7 @@ export const useVolunteerStore = defineStore(
       updateVolunteerStatus,
       updateVolunteerSquad,
       updateVolunteerType,
+      updateVolunteerJobTitle,
       checkApoiaseStatus,
       fetchByEmail,
       addMentee,

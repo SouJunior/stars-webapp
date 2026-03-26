@@ -194,7 +194,7 @@ function confirmDelete() {
 async function deleteSquad() {
   isDeleting.value = true
   try {
-    await squadStore.delete(squad.value.id)
+    await squadStore.del(squad.value.id || squad.value.uuid)
     router.push({ name: 'squads-list' })
   } catch (error) {
     console.error('Error deleting squad', error)

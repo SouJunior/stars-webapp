@@ -171,6 +171,21 @@ async function updateType(volunteerId, newTypeId) {
   }
 }
 
+async function updateJobTitle(volunteerId, newJobTitleId) {
+  try {
+    const response = await axiosInstance.patch(`/volunteers/${volunteerId}/jobtitle/`, null, {
+      headers: headers(),
+      params: {
+        new_jobtitle_id: newJobTitleId
+      }
+    })
+    return response.data
+  } catch (error) {
+    console.error(`Error updating job title for volunteer ID ${volunteerId}:`, error)
+    throw error
+  }
+}
+
 async function requestEditLink(email) {
   const response = await axiosInstance.post('/volunteers/request-edit-link', { email })
   return response.data
@@ -241,5 +256,6 @@ export default {
   getPublicProfile,
   checkApoiaseStatus,
   addMentee,
-  removeMentee
+  removeMentee,
+  updateJobTitle
 }
