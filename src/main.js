@@ -34,8 +34,10 @@ const vuetify = createVuetify({
       myTheme: {
         dark: savedTheme == 'light' ? false : true,
         colors: {
-          primary: '#d7a006',
-          background: '#212121'
+          primary: '#3b82f6',    // O azul vivo dos botões, chips e destaques (Equivalente ao Blue Tailwind)
+          background: '#f4f4f5', // O cinza bem clarinho do fundo da página inteira
+          surface: '#ffffff',    // O branco puro do card do formulário
+          warning: '#ffedd5'
         }
       }
     }

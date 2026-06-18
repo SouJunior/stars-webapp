@@ -3,276 +3,302 @@
     <v-row align="center" justify="center">
       <v-col cols="12" md="10" lg="8" xl="6">
         <v-card elevation="4" rounded="lg" class="overflow-hidden">
+
+          <!-- Header -->
           <div class="bg-primary pa-6 text-center">
             <h1 class="text-h5 text-md-h4 font-weight-bold text-white logo-text">
-              Registro de Voluntário SouJunior
+              Olá quer participar da SouJunior?
             </h1>
             <p class="text-subtitle-1 text-white mt-2 opacity-90">
-              Junte-se a nós e faça a diferença!
+              Para prosseguir e fazer parte da nossa comunidade, precisamos que você realize um
+              breve cadastro. É rápido e fácil!
             </p>
           </div>
 
-          <v-stepper v-model="step" :items="items" hide-actions class="elevation-0">
-            <!-- Step 1: Welcome -->
-            <template #[`item.1`]>
-              <div class="pa-6 pa-md-10 text-center">
-                <v-img
-                  src="@/assets/logo-min.png"
-                  height="120"
-                  class="mb-6 mx-auto"
-                  contain
-                ></v-img>
+          <!-- Form Body -->
+           <!--ajustado para melhorar a opacidade do warning--> 
+          <v-card-text class="pa-4 pa-md-8">
+            <h2 class="text-subtitle-1 font-weight-bold text-primary mb-1">Cadastro de voluntário</h2>
+            <v-alert
+            variant="flat"
+            color="orange-lighten-5"
+            icon="mdi-alert-circle-outline"
+            density="compact"
+            class="mb-6 text-caption text-orange-darken-4 border-sm border-orange-lighten-3 rounded-lg font-weight-medium"
+          >
+            Campos de preenchimento obrigatório (*)
+          </v-alert>
 
-                <h2 class="text-h5 font-weight-bold mb-4 text-primary-darken-1">
-                  Olá! Quer participar do SouJunior?
-                </h2>
-                <p class="text-body-1 text-medium-emphasis mb-8 mx-auto" style="max-width: 600px">
-                  Para prosseguir e fazer parte da nossa comunidade, precisamos que você realize um
-                  breve cadastro. É rápido e fácil!
-                </p>
+            <v-form ref="form" @submit.prevent="submitApplicant">
 
-                <div class="d-flex justify-center flex-wrap gap-4">
-                  <v-btn
-                    color="primary"
-                    size="large"
-                    rounded="pill"
-                    elevation="2"
-                    class="px-8"
-                    @click="nextStep"
+              <!-- 1. Tipo de Voluntário -->
+              <p class="text-body-2 font-weight-medium mb-2">1. Tipo de voluntário *</p>
+              <v-select
+                v-model="applicant.volunteer_type_id"
+                :items="volunteerTypes"
+                item-title="label"
+                item-value="id"
+                placeholder="Selecionar"
+                variant="outlined"
+                density="comfortable"
+                append-inner-icon="mdi-chevron-right"
+                :rules="[(v) => !!v || 'Selecione um tipo de voluntário']"
+                class="mb-4"
+              />
+
+              <!-- 2. Área de Atuação -->
+              <div class="mb-4">
+                <div class="d-flex justify-space-between align-center mb-2">
+                  <p class="text-body-2 font-weight-medium">2. Área de Atuação *</p>
+                  <span class="text-caption text-medium-emphasis">Selecione até 3 áreas</span>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                  <v-chip
+                    v-for="area in filteredAreas"
+                    :key="area"
+                    :color="applicant.selected_areas.includes(area) ? 'primary' : undefined"
+                    :variant="applicant.selected_areas.includes(area) ? 'flat' : 'outlined'"
+                    size="small"
+                    class="cursor-pointer"
+                    @click="toggleArea(area)"
                   >
-                    Continuar <v-icon end>mdi-arrow-right</v-icon>
-                  </v-btn>
-                  <v-btn
+                    {{ area }}
+                  </v-chip>
+                </div>
+
+                <!-- Front-end sub-block -->
+                <div v-if="applicant.selected_areas.includes('Front-end')" class="tech-block mt-4 pa-4 rounded">
+                  <p class="text-caption font-weight-bold mb-3">
+                    Tecnologias Front-end
+                    <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
+                  </p>
+                  <v-checkbox
+                    v-for="tech in techsFrontendOptions"
+                    :key="tech"
+                    v-model="applicant.techs_frontend"
+                    :label="tech"
+                    :value="tech"
+                    density="compact"
+                    hide-details
+                    class="mb-1"
+                    color="primary"
+                  />
+                  <v-text-field
+                    v-if="applicant.techs_frontend.includes('Outros')"
+                    v-model="applicant.techs_frontend_outros"
+                    placeholder="Especifique outras tecnologias..."
                     variant="outlined"
-                    color="secondary"
-                    size="large"
-                    rounded="pill"
-                    class="px-8 ml-sm-4 mt-4 mt-sm-0"
-                    :to="{ name: 'home' }"
-                    @click="resetForm"
-                  >
-                    Cancelar
-                  </v-btn>
-                </div>
-              </div>
-            </template>
-
-            <!-- Step 2: Form -->
-            <template #[`item.2`]>
-              <v-card-text class="pa-4 pa-md-8">
-                <v-form ref="form" @submit.prevent="submitApplicant">
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field
-                        v-model="applicant.name"
-                        label="Nome Completo*"
-                        placeholder="Ex: Junior da Silva"
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="mdi-account"
-                        :rules="[(v) => !!v || 'Nome é obrigatório']"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="applicant.email"
-                        label="E-mail*"
-                        placeholder="exemplo@email.com"
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="mdi-email"
-                        :rules="emailRules"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="applicant.phone"
-                        label="Telefone / WhatsApp*"
-                        placeholder="Ex: (11) 99999-9999"
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="mdi-phone"
-                        :rules="phoneRules"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="applicant.linkedin"
-                        label="LinkedIn*"
-                        placeholder="https://linkedin.com/in/..."
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="mdi-linkedin"
-                        :rules="linkedinRules"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="applicant.github"
-                        label="GitHub (Opcional)"
-                        placeholder="https://github.com/..."
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="mdi-github"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-text-field
-                        v-model="applicant.discord"
-                        label="Discord (Opcional)"
-                        placeholder="Ex: wouerner"
-                        variant="outlined"
-                        density="comfortable"
-                        prepend-inner-icon="fa:fab fa-discord"
-                      ></v-text-field>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-select
-                        v-model="applicant.volunteer_type_id"
-                        label="Tipo de Voluntário*"
-                        variant="outlined"
-                        density="comfortable"
-                        item-title="name"
-                        item-value="id"
-                        :items="volunteerTypeStore.data"
-                        prepend-inner-icon="mdi-account-group"
-                        :rules="[(v) => !!v || 'Selecione um tipo']"
-                      ></v-select>
-                    </v-col>
-
-                    <v-col cols="12" md="6">
-                      <v-select
-                        v-model="applicant.jobtitle_id"
-                        label="Cargo Pretendido*"
-                        variant="outlined"
-                        density="comfortable"
-                        item-title="title"
-                        item-value="id"
-                        :items="jobTitleStore.data"
-                        prepend-inner-icon="mdi-briefcase"
-                        :rules="[(v) => !!v || 'Selecione um cargo']"
-                      ></v-select>
-                    </v-col>
-
-                    <v-col cols="12">
-                      <v-checkbox
-                        v-model="applicant.terms"
-                        color="primary"
-                        hide-details
-                        class="mt-0"
-                      >
-                        <template #label>
-                          <span class="text-body-2">
-                            Declaro que as informações são verdadeiras e aceito os
-                            <a
-                              href="#"
-                              class="text-primary font-weight-bold text-decoration-none"
-                              @click.prevent.stop="dialog = true"
-                            >
-                              Termos e Condições </a
-                            >.
-                          </span>
-                        </template>
-                      </v-checkbox>
-                    </v-col>
-                  </v-row>
-
-                  <div class="d-flex justify-center mt-6 gap-4 flex-wrap">
-                    <v-btn
-                      color="primary"
-                      size="large"
-                      rounded="pill"
-                      class="px-8"
-                      :loading="loading"
-                      @click="submitApplicant"
-                    >
-                      Cadastrar-se
-                    </v-btn>
-                    <v-btn
-                      variant="text"
-                      color="error"
-                      size="large"
-                      rounded="pill"
-                      class="px-6"
-                      @click="cancelForm"
-                    >
-                      Cancelar
-                    </v-btn>
-                  </div>
-                </v-form>
-              </v-card-text>
-            </template>
-
-            <!-- Step 3: Success -->
-            <template #[`item.3`]>
-              <div class="pa-8 text-center">
-                <v-scale-transition appear>
-                  <v-icon size="100" color="success" class="mb-6">mdi-check-circle-outline</v-icon>
-                </v-scale-transition>
-
-                <h2 class="text-h4 font-weight-bold text-success mb-4">Cadastro Realizado!</h2>
-
-                <p class="text-body-1 text-medium-emphasis mb-8 mx-auto" style="max-width: 500px">
-                  Seu registro foi efetuado com sucesso. Você receberá um e-mail de confirmação em
-                  breve.
-                </p>
-
-                <div class="video-container mb-8">
-                  <iframe
-                    src="https://www.youtube.com/embed/asiPy74n6zY"
-                    title="YouTube video player"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                    allowfullscreen
-                  ></iframe>
+                    density="compact"
+                    maxlength="100"
+                    class="mt-3"
+                    hide-details
+                  />
                 </div>
 
-                <div class="d-flex justify-center flex-column align-center">
-                  <v-btn
+                <!-- Back-end sub-block -->
+                <div v-if="applicant.selected_areas.includes('Back-end')" class="tech-block mt-4 pa-4 rounded">
+                  <p class="text-caption font-weight-bold mb-3">
+                    Tecnologias Back-end
+                    <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
+                  </p>
+                  <v-checkbox
+                    v-for="tech in techsBackendOptions"
+                    :key="tech"
+                    v-model="applicant.techs_backend"
+                    :label="tech"
+                    :value="tech"
+                    density="compact"
+                    hide-details
+                    class="mb-1"
                     color="primary"
-                    size="large"
-                    rounded="pill"
-                    elevation="2"
-                    :to="{ name: 'search' }"
-                    prepend-icon="mdi-magnify"
-                    class="px-8 mb-4"
-                  >
-                    Acompanhar Cadastro
-                  </v-btn>
-                  <a
-                    href="https://apoia.se/soujunior"
-                    target="_blank"
-                    class="text-decoration-none text-primary"
-                  >
-                    Apoie o SouJunior!
-                  </a>
-                  <a
-                    href="https://linktr.ee/wouerner"
-                    target="_blank"
-                    class="text-decoration-none text-primary mt-2"
-                  >
-                    Redes Sociais do Fundador: Wouerner Brandão
-                  </a>
+                  />
+                  <v-text-field
+                    v-if="applicant.techs_backend.includes('Outros')"
+                    v-model="applicant.techs_backend_outros"
+                    placeholder="Especifique outras tecnologias..."
+                    variant="outlined"
+                    density="compact"
+                    maxlength="100"
+                    class="mt-3"
+                    hide-details
+                  />
                 </div>
               </div>
-            </template>
-          </v-stepper>
+
+              <!-- 3. Informações Pessoais -->
+              <p class="text-body-2 font-weight-medium mb-3">3. Informações Pessoais</p>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="applicant.name"
+                    label="Nome Completo *"
+                    placeholder="Preencha seu nome completo"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'Nome é obrigatório']"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.email"
+                    label="Email *"
+                    placeholder="your.email@example.com"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="emailRules"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.phone"
+                    label="WhatsApp *"
+                    placeholder="+55 (11) 99999-9999"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'WhatsApp é obrigatório']"
+                  />
+                </v-col>
+              </v-row>
+
+              <!-- 4. Perfil Profissional -->
+              <p class="text-body-2 font-weight-medium mb-3 mt-2">4. Perfil Profissional</p>
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="applicant.linkedin"
+                    label="LinkedIn *"
+                    placeholder="https://linkedin.com/in/seu-perfil"
+                    variant="outlined"
+                    density="comfortable"
+                    prepend-inner-icon="mdi-linkedin"
+                    :rules="linkedinRules"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.github"
+                    label="Github (Opcional)"
+                    placeholder="Nome de Usuário"
+                    variant="outlined"
+                    density="comfortable"
+                    prepend-inner-icon="mdi-github"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.discord"
+                    label="Discord (Opcional)"
+                    placeholder="Nome de Usuário"
+                    variant="outlined"
+                    density="comfortable"
+                    prepend-inner-icon="mdi-discord"
+                  />
+                </v-col>
+              </v-row>
+
+              <!-- 5. Indicação -->
+              <p class="text-body-2 font-weight-medium mb-2 mt-2">5. Indicação</p>
+              <p class="text-caption text-medium-emphasis mb-3">Você foi indicado(a) por alguém da SouJunior?</p>
+
+              <v-btn-toggle
+                v-model="applicant.was_referred"
+                mandatory
+                density="compact"
+                class="mb-4"
+              >
+                <v-btn value="sim" variant="outlined" size="small">Sim</v-btn>
+                <v-btn value="nao" variant="outlined" size="small" color="primary">Não</v-btn>
+              </v-btn-toggle>
+
+              <v-row v-if="applicant.was_referred === 'sim'" class="mt-0">
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="applicant.referred_by_name"
+                    label="Nome da pessoa *"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'Nome da indicação é obrigatório']"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.referred_by_position"
+                    label="Cargo *"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'Cargo da indicação é obrigatório']"
+                  />
+                </v-col>
+                <v-col cols="12" md="6">
+                  <v-text-field
+                    v-model="applicant.referred_by_linkedin"
+                    label="LinkedIn da indicação *"
+                    placeholder="https://linkedin.com/in/..."
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'LinkedIn da indicação é obrigatório']"
+                  />
+                </v-col>
+              </v-row>
+
+              <!-- Terms checkbox -->
+              <v-checkbox
+                v-model="applicant.terms"
+                color="primary"
+                hide-details
+                class="mt-2 mb-6"
+              >
+                <template #label>
+                  <span class="text-body-2">
+                    Eu aceito e concordo com os termos de condição
+                    <a
+                      href="#"
+                      class="text-primary font-weight-bold text-decoration-none"
+                      @click.prevent.stop="dialogTerms = true"
+                    >
+                      Termos e condições *
+                    </a>
+                  </span>
+                </template>
+              </v-checkbox>
+
+              <!-- Action buttons -->
+              <div class="d-flex justify-center gap-4 flex-wrap">
+                <v-btn
+                  variant="outlined"
+                  color="secondary"
+                  size="large"
+                  rounded="pill"
+                  class="px-8"
+                  @click="dialogCancel = true"
+                >
+                  Cancelar
+                </v-btn>
+                <v-btn
+                  color="primary"
+                  size="large"
+                  rounded="pill"
+                  class="px-8"
+                  :loading="loading"
+                  @click="submitApplicant"
+                >
+                  Cadastrar
+                </v-btn>
+              </div>
+
+            </v-form>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
-    <!-- Terms Dialog -->
-    <v-dialog v-model="dialog" max-width="600" scrollable>
+    <!-- ─── Dialog: Termos e Condições ─── -->
+    <v-dialog v-model="dialogTerms" max-width="600" scrollable>
       <v-card rounded="lg">
-        <v-card-title class="text-h5 bg-primary text-white pa-4"> Termos e Condições </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text class="pa-4 text-body-1" style="max-height: 400px">
+        <v-card-title class="text-h6 bg-primary text-white pa-4">Termos e Condições</v-card-title>
+        <v-divider />
+        <v-card-text class="pa-4 text-body-2" style="max-height: 400px">
           <p>
             Todas as participações no SouJunior são <strong>VOLUNTÁRIAS</strong>, não remuneradas e
             sem qualquer vínculo empregatício. As participações visam, unicamente, servir de
@@ -284,145 +310,278 @@
             e/ou recrutadores.
           </p>
         </v-card-text>
-        <v-divider></v-divider>
+        <v-divider />
         <v-card-actions class="pa-4 justify-end">
           <v-btn variant="text" color="error" @click="rejectTerms">Recusar</v-btn>
-          <v-btn color="primary" variant="elevated" elevation="1" @click="acceptTerms"
-            >Aceitar e Concordar</v-btn
-          >
+          <v-btn color="primary" variant="elevated" @click="acceptTerms">Aceitar e Concordar</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <!-- ─── Dialog: Alerta de Desistência ─── -->
+    <v-dialog v-model="dialogCancel" max-width="440">
+      <v-card rounded="lg">
+        <v-card-title class="text-h6 pa-4">Deseja mesmo cancelar?</v-card-title>
+        <v-card-text class="text-body-2 px-4 pb-2">
+          Seu progresso será perdido e você voltará à página inicial.
+        </v-card-text>
+        <v-card-actions class="pa-4 justify-end">
+          <v-btn variant="text" @click="dialogCancel = false">Voltar</v-btn>
+          <v-btn color="error" variant="elevated" @click="confirmCancel">Sim, cancelar</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <!-- ─── Dialog: Sucesso ─── -->
+    <v-dialog v-model="dialogSuccess" max-width="480" persistent>
+      <v-card rounded="lg" class="text-center pa-8">
+        <v-icon size="80" color="success" class="mb-4">mdi-check-circle-outline</v-icon>
+        <v-card-title class="text-h5 font-weight-bold text-success justify-center">
+          Cadastro Realizado!
+        </v-card-title>
+        <v-card-text class="text-body-2 text-medium-emphasis">
+          Seu registro foi efetuado com sucesso. Você receberá um e-mail de confirmação em breve.
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="primary" variant="elevated" rounded="pill" :to="{ name: 'home' }" @click="resetForm">
+            Voltar ao início
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
-
+import { ref, reactive, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { event } from 'vue-gtag'
 import { useVolunteerStore } from '@/stores/volunteer.js'
-import { useJobtitleStore } from '@/stores/jobtitle.js'
 import { useVolunteerTypeStore } from '@/stores/volunteerType.js'
 
+// ─── Router & Stores ───────────────────────────────────────────────────────────
 const $router = useRouter()
-
 const volunteerStore = useVolunteerStore()
-const jobTitleStore = useJobtitleStore()
 const volunteerTypeStore = useVolunteerTypeStore()
 
-jobTitleStore.fetchJobtitles()
 volunteerTypeStore.fetchVolunteerTypes()
 
+// ─── Form ref ──────────────────────────────────────────────────────────────────
 const form = ref(null)
-const step = ref(1)
-const items = [
-  { step: 1, title: 'Bem-vindo' },
-  { step: 2, title: 'Dados' },
-  { step: 3, title: 'Conclusão' }
+
+// ─── UI state ──────────────────────────────────────────────────────────────────
+const loading = ref(false)
+const dialogTerms = ref(false)
+const dialogCancel = ref(false)
+const dialogSuccess = ref(false)
+
+// ─── Static data ───────────────────────────────────────────────────────────────
+const volunteerTypes = [
+  { id: 1, label: 'Júnior' },
+  { id: 2, label: 'Mentor' },
+  { id: 3, label: 'Head' }
 ]
+
+const areasJuniorMentor = [
+  'Agilidade', 'Back-end', 'Dados', 'Design Operations', 'DevOps', 'Front-end',
+  'Product Growth', 'Product Manager', 'Product Marketing Manager',
+  'Product Operations', 'QA', 'Social Media', 'Tech Recruiter', 'UX Research', 'UX-UI'
+]
+
+const areasHead = [
+  'Agilidade', 'Back-end', 'Dados', 'Design', 'DevOps', 'Front-end',
+  'Produtos', 'QA', 'Social Media', 'Tech Recruiter'
+]
+
+const techsFrontendOptions = [
+  'Styled-components ou Tailwind',
+  'Typescript',
+  'React',
+  'HTML / CSS',
+  'Design Pattern',
+  'Performance e otimização de bundle',
+  'Otimização na renderização de imagens',
+  'Outros'
+]
+
+const techsBackendOptions = [
+  'Node.JS com Typescript',
+  'Java',
+  'Python',
+  'PHP',
+  'Outros'
+]
+
+// ─── Reactive form state ───────────────────────────────────────────────────────
 const applicant = reactive({
+  // Tipo e áreas
+  volunteer_type_id: null,
+  selected_areas: [],
+  techs_frontend: [],
+  techs_frontend_outros: '',
+  techs_backend: [],
+  techs_backend_outros: '',
+  // Pessoais
   name: '',
+  email: '',
   phone: '',
+  // Profissional
   linkedin: '',
   github: '',
   discord: '',
-  email: '',
-  jobtitle_id: null,
-  volunteer_type_id: 1, // Default to Junior
-  vertical_ids: [],
+  // Indicação
+  was_referred: 'nao',
+  referred_by_name: '',
+  referred_by_position: '',
+  referred_by_linkedin: '',
+  // Termos
   terms: false
 })
 
-const loading = ref(false)
-const dialog = ref(false)
+// ─── Computed ──────────────────────────────────────────────────────────────────
+const isHead = computed(() => {
+  const found = volunteerTypes.find((t) => t.id === applicant.volunteer_type_id)
+  return found?.label === 'Head'
+})
 
-const nextStep = () => {
-  step.value++
-}
+const filteredAreas = computed(() => (isHead.value ? areasHead : areasJuniorMentor))
 
+// ─── Validation rules ──────────────────────────────────────────────────────────
 const emailRules = [
   (v) => !!v || 'E-mail é obrigatório',
   (v) => /.+@.+\..+/.test(v) || 'E-mail deve ser válido'
 ]
 
-const phoneRules = [(v) => !!v || 'Telefone é obrigatório']
+const linkedinRules = [
+  (v) => !!v || 'LinkedIn é obrigatório',
+  (v) =>
+    /^https?:\/\/(www\.)?linkedin\.com\/in\/.+/.test(v) ||
+    'Informe uma URL de LinkedIn válida'
+]
 
-const linkedinRules = [(v) => !!v || 'LinkedIn é obrigatório']
+// ─── Helpers ───────────────────────────────────────────────────────────────────
+const toggleArea = (area) => {
+  const idx = applicant.selected_areas.indexOf(area)
+  if (idx === -1) {
+    if (applicant.selected_areas.length >= 3) return
+    applicant.selected_areas.push(area)
+  } else {
+    applicant.selected_areas.splice(idx, 1)
+    // Clean techs if area is deselected
+    if (area === 'Front-end') {
+      applicant.techs_frontend = []
+      applicant.techs_frontend_outros = ''
+    }
+    if (area === 'Back-end') {
+      applicant.techs_backend = []
+      applicant.techs_backend_outros = ''
+    }
+  }
+}
 
 const resetForm = () => {
+  applicant.volunteer_type_id = null
+  applicant.selected_areas = []
+  applicant.techs_frontend = []
+  applicant.techs_frontend_outros = ''
+  applicant.techs_backend = []
+  applicant.techs_backend_outros = ''
   applicant.name = ''
+  applicant.email = ''
   applicant.phone = ''
   applicant.linkedin = ''
   applicant.github = ''
   applicant.discord = ''
-  applicant.email = ''
-  applicant.jobtitle_id = null
-  applicant.volunteer_type_id = 1
-  applicant.vertical_ids = []
+  applicant.was_referred = 'nao'
+  applicant.referred_by_name = ''
+  applicant.referred_by_position = ''
+  applicant.referred_by_linkedin = ''
   applicant.terms = false
-  step.value = 1
+  form.value?.reset()
 }
 
+// ─── Dialog actions ────────────────────────────────────────────────────────────
+const acceptTerms = () => {
+  applicant.terms = true
+  dialogTerms.value = false
+}
+
+const rejectTerms = () => {
+  applicant.terms = false
+  dialogTerms.value = false
+}
+
+const confirmCancel = () => {
+  dialogCancel.value = false
+  resetForm()
+  $router.push({ name: 'home' })
+}
+
+// ─── Submit ────────────────────────────────────────────────────────────────────
 const submitApplicant = async () => {
   const { valid } = await form.value.validate()
+  if (!valid) return
 
-  if (!valid) {
+  if (!applicant.terms) {
+    dialogTerms.value = true
     return
   }
 
-  if (!applicant.terms) {
-    return alert('Você precisa concordar com os termos e condições!')
+  // Merge "Outros" free text into the tech arrays
+  const frontendTechs = applicant.techs_frontend.includes('Outros')
+    ? [
+        ...applicant.techs_frontend.filter((t) => t !== 'Outros'),
+        applicant.techs_frontend_outros.trim()
+      ].filter(Boolean)
+    : [...applicant.techs_frontend]
+
+  const backendTechs = applicant.techs_backend.includes('Outros')
+    ? [
+        ...applicant.techs_backend.filter((t) => t !== 'Outros'),
+        applicant.techs_backend_outros.trim()
+      ].filter(Boolean)
+    : [...applicant.techs_backend]
+
+  const payload = {
+    name: applicant.name,
+    email: applicant.email,
+    phone: applicant.phone || null,
+    linkedin: applicant.linkedin,
+    github: applicant.github || null,
+    discord: applicant.discord || null,
+    volunteer_type_id: applicant.volunteer_type_id,
+    selected_areas: applicant.selected_areas,
+    techs_frontend: frontendTechs,
+    techs_backend: backendTechs,
+    is_active: true,
+    ...(applicant.was_referred === 'sim'
+      ? {
+          referred_by_name: applicant.referred_by_name,
+          referred_by_position: applicant.referred_by_position,
+          referred_by_linkedin: applicant.referred_by_linkedin
+        }
+      : {
+          referred_by_name: null,
+          referred_by_position: null,
+          referred_by_linkedin: null
+        })
   }
 
-  const { ...newApplicantData } = applicant
   try {
     loading.value = true
-
-    const payload = {
-      name: newApplicantData.name,
-      linkedin: newApplicantData.linkedin || '', // Ensure string
-      github: newApplicantData.github || null,
-      phone: newApplicantData.phone || null,
-      discord: newApplicantData.discord || null,
-      is_active: true,
-      email: newApplicantData.email,
-      jobtitle_id: newApplicantData.jobtitle_id,
-      volunteer_type_id: newApplicantData.volunteer_type_id,
-      vertical_ids: newApplicantData.vertical_ids || []
-    }
-
-    // Create the volunteer profile directly
     await volunteerStore.create(payload)
     event('sign_up', {
       method: 'email',
-      volunteer_type: applicant.volunteer_type_id,
-      job_title: applicant.jobtitle_id
+      volunteer_type: applicant.volunteer_type_id
     })
-    nextStep()
+    dialogSuccess.value = true
   } catch (error) {
     console.error(error.message)
     alert('Erro ao realizar cadastro: ' + error.message)
   } finally {
     loading.value = false
   }
-}
-
-const cancelForm = () => {
-  if (confirm('Você deseja mesmo cancelar esta ação?')) {
-    resetForm()
-    $router.push({ name: 'home' })
-  }
-}
-
-const acceptTerms = () => {
-  applicant.terms = true
-  dialog.value = false
-}
-
-const rejectTerms = () => {
-  applicant.terms = false
-  dialog.value = false
 }
 </script>
 
@@ -434,32 +593,16 @@ const rejectTerms = () => {
 
 .registration-page-background {
   background-color: rgb(var(--v-theme-background));
-  min-height: 100vh; /* Ensure it covers full viewport height */
-  padding: 24px 16px; /* Add some padding around the card on smaller screens, 16px for left/right */
+  min-height: 100vh;
+  padding: 24px 16px;
 }
 
-/* Original stepper styles */
-.v-stepper {
-  box-shadow: none !important;
+.tech-block {
+  background-color: rgba(var(--v-theme-surface-variant), 0.4);
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 
-.v-stepper :deep(.v-stepper-header) {
-  display: none;
-}
-
-.video-container {
-  width: 100%;
-  max-width: 320px; /* Mimic mobile screen width */
-  aspect-ratio: 9 / 16; /* Enforce vertical video ratio */
-  margin: 0 auto 24px; /* Center horizontally */
-  border-radius: 12px; /* Optional: Rounded corners for better aesthetics */
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Optional: Subtle shadow */
-}
-
-.video-container iframe {
-  width: 100%;
-  height: 100%;
-  display: block; /* Remove inline gap */
+.cursor-pointer {
+  cursor: pointer;
 }
 </style>
