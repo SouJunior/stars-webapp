@@ -34,7 +34,7 @@
               <!-- 1. Tipo de Voluntário -->
               <p class="text-body-2 font-weight-medium mb-2">1. Tipo de voluntário *</p>
               <v-select
-                v-model="applicant.volunteer_type_id"
+                v-model="applicant.jobtitle_id"
                 :items="volunteerTypes"
                 item-title="label"
                 item-value="id"
@@ -57,8 +57,8 @@
                   <v-chip
                     v-for="area in filteredAreas"
                     :key="area"
-                    :color="applicant.selected_areas.includes(area) ? 'primary' : undefined"
-                    :variant="applicant.selected_areas.includes(area) ? 'flat' : 'outlined'"
+                    :color="applicant.vertical_ids.includes(area) ? 'primary' : undefined"
+                    :variant="applicant.vertical_ids.includes(area) ? 'flat' : 'outlined'"
                     size="small"
                     class="cursor-pointer"
                     @click="toggleArea(area)"
@@ -68,7 +68,7 @@
                 </div>
 
                 <!-- Front-end sub-block -->
-                <div v-if="applicant.selected_areas.includes('Front-end')" class="tech-block mt-4 pa-4 rounded">
+                <div v-if="applicant.vertical_ids.includes('Front-end')" class="tech-block mt-4 pa-4 rounded">
                   <p class="text-caption font-weight-bold mb-3">
                     Tecnologias Front-end
                     <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
@@ -97,7 +97,7 @@
                 </div>
 
                 <!-- Back-end sub-block -->
-                <div v-if="applicant.selected_areas.includes('Back-end')" class="tech-block mt-4 pa-4 rounded">
+                <div v-if="applicant.vertical_ids.includes('Back-end')" class="tech-block mt-4 pa-4 rounded">
                   <p class="text-caption font-weight-bold mb-3">
                     Tecnologias Back-end
                     <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
@@ -196,6 +196,7 @@
                   />
                 </v-col>
               </v-row>
+              
 
               <!-- 5. Indicação -->
               <p class="text-body-2 font-weight-medium mb-2 mt-2">5. Indicação</p>
@@ -413,11 +414,12 @@ const techsBackendOptions = [
   'Outros'
 ]
 
+
 // ─── Reactive form state ───────────────────────────────────────────────────────
 const applicant = reactive({
   // Tipo e áreas
-  volunteer_type_id: null,
-  selected_areas: [],
+  jobtitle_id: null,
+  vertical_ids: [],
   techs_frontend: [],
   techs_frontend_outros: '',
   techs_backend: [],
@@ -441,7 +443,7 @@ const applicant = reactive({
 
 // ─── Computed ──────────────────────────────────────────────────────────────────
 const isHead = computed(() => {
-  const found = volunteerTypes.find((t) => t.id === applicant.volunteer_type_id)
+  const found = volunteerTypes.find((t) => t.id === applicant.jobtitle_id)
   return found?.label === 'Head'
 })
 
@@ -462,12 +464,12 @@ const linkedinRules = [
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 const toggleArea = (area) => {
-  const idx = applicant.selected_areas.indexOf(area)
+  const idx = applicant.vertical_ids.indexOf(area)
   if (idx === -1) {
-    if (applicant.selected_areas.length >= 3) return
-    applicant.selected_areas.push(area)
+    if (applicant.vertical_ids.length >= 3) return
+    applicant.vertical_ids.push(area)
   } else {
-    applicant.selected_areas.splice(idx, 1)
+    applicant.vertical_ids.splice(idx, 1)
     // Clean techs if area is deselected
     if (area === 'Front-end') {
       applicant.techs_frontend = []
@@ -481,8 +483,8 @@ const toggleArea = (area) => {
 }
 
 const resetForm = () => {
-  applicant.volunteer_type_id = null
-  applicant.selected_areas = []
+  applicant.jobtitle_id = null
+  applicant.vertical_ids = []
   applicant.techs_frontend = []
   applicant.techs_frontend_outros = ''
   applicant.techs_backend = []
@@ -543,6 +545,13 @@ const submitApplicant = async () => {
       ].filter(Boolean)
     : [...applicant.techs_backend]
 
+  const verticalMapping = {
+    'Agilidade': 1, 'Back-end': 2, 'Dados': 3, 'Design Operations': 4, 'DevOps': 5,
+    'Front-end': 6, 'Product Growth': 7, 'Product Manager': 8, 'Product Marketing Manager': 9,
+    'Product Operations': 10, 'QA': 11, 'Social Media': 12, 'Tech Recruiter': 13,
+    'UX Research': 14, 'UX-UI': 15, 'Design': 16, 'Produtos': 17
+  }
+
   const payload = {
     name: applicant.name,
     email: applicant.email,
@@ -550,8 +559,9 @@ const submitApplicant = async () => {
     linkedin: applicant.linkedin,
     github: applicant.github || null,
     discord: applicant.discord || null,
-    volunteer_type_id: applicant.volunteer_type_id,
-    selected_areas: applicant.selected_areas,
+    jobtitle_id: applicant.jobtitle_id,
+    vertical_ids: applicant.vertical_ids.map(name => verticalMapping[name]).filter(Boolean),
+    terms_accepted: applicant.terms,
     techs_frontend: frontendTechs,
     techs_backend: backendTechs,
     is_active: true,
@@ -573,7 +583,7 @@ const submitApplicant = async () => {
     await volunteerStore.create(payload)
     event('sign_up', {
       method: 'email',
-      volunteer_type: applicant.volunteer_type_id
+      job_title: applicant.jobtitle_id
     })
     dialogSuccess.value = true
   } catch (error) {
