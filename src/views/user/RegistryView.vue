@@ -552,31 +552,54 @@ const submitApplicant = async () => {
     'UX Research': 14, 'UX-UI': 15, 'Design': 16, 'Produtos': 17
   }
 
-  const payload = {
-    name: applicant.name,
-    email: applicant.email,
-    phone: applicant.phone || null,
-    linkedin: applicant.linkedin,
-    github: applicant.github || null,
-    discord: applicant.discord || null,
-    jobtitle_id: applicant.jobtitle_id,
-    vertical_ids: applicant.vertical_ids.map(name => verticalMapping[name]).filter(Boolean),
-    terms_accepted: applicant.terms,
-    techs_frontend: frontendTechs,
-    techs_backend: backendTechs,
-    is_active: true,
-    ...(applicant.was_referred === 'sim'
-      ? {
-          referred_by_name: applicant.referred_by_name,
-          referred_by_position: applicant.referred_by_position,
-          referred_by_linkedin: applicant.referred_by_linkedin
-        }
-      : {
-          referred_by_name: null,
-          referred_by_position: null,
-          referred_by_linkedin: null
-        })
+  const prepararTechsDinamicas = () => {
+  const listaDeTechs = [];
+
+  // Se houver tecnologias de front-end selecionadas, joga na lista
+  if (frontendTechs && frontendTechs.length > 0) {
+    frontendTechs.forEach(tech => listaDeTechs.push({ area: 'frontend', tech }));
   }
+
+  // Se houver tecnologias de back-end selecionadas, joga na lista
+  if (backendTechs && backendTechs.length > 0) {
+    backendTechs.forEach(tech => listaDeTechs.push({ area: 'backend', tech }));
+  }
+
+  // OBS: Como DevOps e QA ainda não têm inputs de texto na tela, 
+  // eles não entram aqui por enquanto, mas a estrutura já fica pronta!
+
+  return listaDeTechs;
+};
+
+  const payload = {
+  name: applicant.name,
+  email: applicant.email,
+  phone: applicant.phone || null,
+  linkedin: applicant.linkedin,
+  github: applicant.github || null,
+  discord: applicant.discord || null,
+  jobtitle_id: applicant.jobtitle_id,
+  
+  // Transforma os nomes das tags clicadas (ex: 'DevOps', 'QA') nos IDs correspondentes
+  vertical_ids: applicant.vertical_ids.map(name => verticalMapping[name]).filter(Boolean),
+  
+  // Mudança aqui: Enviamos o array unificado em vez de 'techs_frontend' e 'techs_backend' separados
+  techs: prepararTechsDinamicas(),
+  
+  terms_accepted: applicant.terms,
+  is_active: true,
+  ...(applicant.was_referred === 'sim'
+    ? {
+        referred_by_name: applicant.referred_by_name,
+        referred_by_position: applicant.referred_by_position,
+        referred_by_linkedin: applicant.referred_by_linkedin
+      }
+    : {
+        referred_by_name: null,
+        referred_by_position: null,
+        referred_by_linkedin: null
+      })
+}
 
   try {
     loading.value = true
