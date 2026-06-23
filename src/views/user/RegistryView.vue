@@ -352,6 +352,11 @@
     </v-dialog>
 
   </v-container>
+
+  <div class="mascote-container">
+  <img src="@/assets/mascote.png" alt="Mascote SouJunior" class="mascote-img" />
+</div>
+
 </template>
 
 <script setup>

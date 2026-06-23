@@ -317,4 +317,30 @@ const formattedName = computed(() => {
 .logo-text {
   font-family: 'Radio Canada', serif !important;
 }
+
+/* Container principal precisa de position relative para ancorar o mascote */
+.container-principal {
+  position: relative;
+}
+
+/* Posicionamento do Mascote */
+.mascote-container {
+  position: absolute;
+  left: 350px;        /* Puxa para fora do card pela esquerda */
+  bottom: 60px;       /* Alinha verticalmente com a área dos termos/botões */
+  z-index: 10;
+}
+
+.mascote-img {
+  width: 160px;
+  height: auto;
+  display: block;
+}
+
+/* Responsividade */
+@media (max-width: 960px) {
+  .mascote-container {
+    display: none;
+  }
+}
 </style>
