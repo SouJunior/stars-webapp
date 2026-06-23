@@ -174,6 +174,12 @@
         </div>
 
         <div class="d-flex align-center ga-2">
+          <v-btn
+            :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
+            :aria-label="isDark ? 'Ativar modo claro' : 'Ativar modo escuro'"
+            variant="text"
+            @click="toggleDark"
+          />
           <v-menu v-if="logged === true" open-on-hover>
             <template #activator="{ props }">
               <v-btn
@@ -236,6 +242,7 @@ import { ref, computed } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useSnackbarStore } from '@/stores/snackbar'
+import { useTheme } from 'vuetify'
 
 const snackbarStore = useSnackbarStore()
 
@@ -269,6 +276,14 @@ const formattedName = computed(() => {
 
   return parts[0]
 })
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
+function toggleDark() {
+  const novoTema = isDark.value ? 'myTheme' : 'myDarkTheme'
+  theme.global.name.value = novoTema
+  localStorage.setItem('theme', isDark.value ? 'light' : 'dark')
+}
 </script>
 
 <style lang="scss">

@@ -365,6 +365,7 @@ import { useRouter } from 'vue-router'
 import { event } from 'vue-gtag'
 import { useVolunteerStore } from '@/stores/volunteer.js'
 import { useVolunteerTypeStore } from '@/stores/volunteerType.js'
+import { useTheme } from 'vuetify'
 
 // ─── Router & Stores ───────────────────────────────────────────────────────────
 const $router = useRouter()
@@ -621,6 +622,16 @@ const submitApplicant = async () => {
     loading.value = false
   }
 }
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
+
+function toggleDark() {
+  const novoTema = isDark.value ? 'myTheme' : 'myDarkTheme'
+  theme.global.name.value = novoTema
+  localStorage.setItem('theme', isDark.value ? 'light' : 'dark')
+}
+
 </script>
 
 <style scoped>
@@ -643,4 +654,5 @@ const submitApplicant = async () => {
 .cursor-pointer {
   cursor: pointer;
 }
+
 </style>

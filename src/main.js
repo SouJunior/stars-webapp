@@ -28,20 +28,30 @@ const vuetify = createVuetify({
       fa
     }
   },
+
   theme: {
-    defaultTheme: 'myTheme',
-    themes: {
-      myTheme: {
-        dark: savedTheme == 'light' ? false : true,
-        colors: {
-          primary: '#3b82f6',    // O azul vivo dos botões, chips e destaques (Equivalente ao Blue Tailwind)
-          background: '#f4f4f5', // O cinza bem clarinho do fundo da página inteira
-          surface: '#ffffff',    // O branco puro do card do formulário
-          warning: '#ffedd5'
-        }
+  defaultTheme: savedTheme === 'dark' ? 'myDarkTheme' : 'myTheme',
+  themes: {
+    myTheme: {
+      dark: false,
+      colors: {
+        primary: '#3b82f6',
+        background: '#f4f4f5',
+        surface: '#ffffff',
+        warning: '#ffedd5'
+      }
+    },
+    myDarkTheme: {
+      dark: true,
+      colors: {
+        primary: '#60a5fa',
+        background: '#0f172a',
+        surface: '#1e293b',
+        warning: '#1e293b'
       }
     }
   }
+ }
 })
 
 import App from './App.vue'
