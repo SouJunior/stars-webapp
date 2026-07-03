@@ -13,8 +13,10 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^7.1.0",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
+    "dayjs": "^1.11.19",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "postcss": "^8.4.33",

@@ -1,4 +1,5 @@
 /* eslint-env node */
+/* @typescript-eslint */
 require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
@@ -17,7 +18,15 @@ module.exports = {
       'extends': [
         'plugin:cypress/recommended'
       ]
-    }
+    },
+    {
+      files: [
+        '*.cjs', // Targets all .cjs files, including cypress.config.js
+      ],
+      env: {
+        node: true,
+      },
+    },
   ],
   parserOptions: {
     ecmaVersion: 'latest'

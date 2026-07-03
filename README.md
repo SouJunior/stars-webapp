@@ -56,3 +56,24 @@ npm run test:e2e
 npm run lint
 ```
 # salvando-labs
+
+## DevOps
+
+```mermaid
+sequenceDiagram
+    actor Dev as Desenvolvedores
+    participant Git as GitHub
+    participant Net as Netlify
+
+    Note over Dev,Net: Fluxo de Deploy com Preview
+
+    Dev->>Git: Abre Pull Request (PR) para main
+    Git->>Net: Novo Evento: PR criada
+    Net-->>Git: Deploy Preview criado
+    
+    Note over Dev,Net: Loop de desenvolvimento
+    
+    Dev->>Git: Aprova e mergeia PR para main
+    Git->>Net: Novo Evento: Branch main atualizada
+    Net-->>Git: Deploy de Produção atualizado
+```

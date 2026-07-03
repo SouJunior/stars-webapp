@@ -1,182 +1,149 @@
-import { ref } from "vue";
-import { defineStore } from "pinia";
-import instance from "@/services/http.js";
-import productService from "@/services/product.js";
-import squadService from "@/services/squad.js";
-import router from "@/router";
-import { useSnackbarStore } from "@/stores/snackbar.js";
+import { ref } from 'vue'
+import { defineStore } from 'pinia'
+import instance from '@/services/http.js'
+import router from '@/router'
+import { useSnackbarStore } from '@/stores/snackbar.js'
 
-export const useAuthStore = defineStore('auth', () => {
+export const useAuthStore = defineStore(
+  'auth',
+  () => {
+    const axiosInstance = instance
 
-    const axiosInstance = instance;
-
-    const auth = ref({ name: '', email: '', uuid: '', iat: '' });
-    const products = ref([]);
-    const squads = ref([]);
-    const useSnackbar = useSnackbarStore();
+    const auth = ref({ name: '', email: '', role: '', uuid: '', iat: '' })
+    const squads = ref([])
+    const useSnackbar = useSnackbarStore()
 
     async function login(user) {
-        try {
-            const response = await axiosInstance.post('/login', user);
-            const data = response.data;
+      try {
+        const formData = new URLSearchParams()
+        formData.append('username', user.email)
+        formData.append('password', user.password)
 
-            if (data.error) {
-                alert(data.error)
-                return;
-            } else {
-                const token = data.token;
+        const response = await axiosInstance.post('/token', formData, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        })
+        const data = response.data
 
-                localStorage.setItem('token', token);
+        const token = data.access_token
+        const role = data.role
 
-                auth.value = parseJwt(token);
+        localStorage.setItem('token', token)
+        axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + token
 
-                await fetchProducts(auth.value.uuid);
-
-                if (products.value.length > 0) {
-                    await fetchSquads(products.value[0].uuid);
-                }
-
-                useSnackbar.showSnackbar({
-                    text: 'Bem vindo! ' + auth.value.name,
-                    color: 'success',
-                    timeout: 3000
-                })
-
-                router.push('/onboarding');
-            }
-
-        } catch (error) {
-            if (error.response?.status === 401) {
-                alert(error.response.data)
-            }
+        auth.value = parseJwt(token)
+        if (role) {
+          auth.value.role = role
         }
+
+        useSnackbar.showSnackbar({
+          text: 'Bem vindo! ' + auth.value.email,
+          color: 'success',
+          timeout: 3000
+        })
+
+        router.push({ name: 'volunteers' })
+      } catch (error) {
+        if (error.response?.status === 401) {
+          alert(error.response.data.detail || 'Login incorreto')
+        } else {
+          alert('Erro ao realizar login')
+        }
+      }
     }
 
     async function loginByToken() {
+      const token = localStorage.getItem('token')
 
-        const token = localStorage.getItem('token');
+      if (!token) return
 
-        try {
-            auth.value = parseJwt(token);
+      try {
+        auth.value = parseJwt(token)
+        axiosInstance.defaults.headers['Authorization'] = 'Bearer ' + token
 
-            await fetchProducts(auth.value.uuid);
-
-            if (products.value.length > 0) {
-                await fetchSquads(products.value[0].uuid);
-            }
-
-            useSnackbar.showSnackbar({
-                text: 'Bem vindo! ' + auth.value.name,
-                color: 'success',
-                timeout: 3000
-            })
-
-        } catch (error) {
-            if (error.response?.status === 401) {
-                alert(error.response.data)
-            }
-        }
-    }
-
-    async function fetchProducts(uuid) {
-        products.value = await productService.byUser(uuid)
-        return products.value
-    }
-
-    function setProducts(products) {
-        products.value = products
-        return products.value
-    }
-
-    async function fetchSquads(uuid) {
-        squads.value = await squadService.fetchBy(uuid)
-        return squads.value
+        // Optional: verify token validity with backend if needed
+        // await axiosInstance.get('/users/me/');
+      } catch (error) {
+        console.error('Invalid token', error)
+        logout()
+      }
     }
 
     function getName() {
-        return auth.value.name;
+      return auth.value.name || auth.value.email
     }
 
     function getUuid() {
-        return auth.value.uuid;
+      return auth.value.uuid
     }
 
+    const isAdmin = () => auth.value.role === 'ADMIN'
+    const isHead = () => auth.value.role === 'HEAD' || auth.value.role === 'ADMIN'
+    const isMentor = () => ['ADMIN', 'HEAD', 'MENTOR'].includes(auth.value.role)
+
     async function logout() {
-        localStorage.removeItem('token');
-        $reset();
-        router.push('/');
+      localStorage.removeItem('token')
+      axiosInstance.defaults.headers['Authorization'] = null
+      $reset()
+      router.push('/')
     }
 
     function $reset() {
-        auth.value = { name: '', email: '', token: '' }
-        products.value = []
-        squads.value = []
+      auth.value = { name: '', email: '', token: '' }
+      squads.value = []
     }
 
     function squadReset() {
-        squads.value = []
+      squads.value = []
     }
 
     function parseJwt(token) {
-        var base64Url = token.split('.')[1];
-        var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
-            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-        }).join(''));
+      var base64Url = token.split('.')[1]
+      var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/')
+      var jsonPayload = decodeURIComponent(
+        window
+          .atob(base64)
+          .split('')
+          .map(function (c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+          })
+          .join('')
+      )
 
-        console.log('jsonPayload :', JSON.parse(jsonPayload));
-        return JSON.parse(jsonPayload);
+      const payload = JSON.parse(jsonPayload)
+      // Map sub to email
+      if (payload.sub) {
+        payload.email = payload.sub
+      }
+      return payload
     }
 
     function getSquad() {
-        if (squads.value.length === 0) {
-            return false;
-        }
+      if (squads.value.length === 0) {
+        return false
+      }
 
-        return squads.value[0];
-    }
-
-    function getProduct() {
-        if (products.value.length === 0) {
-            return false;
-        }
-
-        return products.value[0];
-    }
-
-    async function updateProfile(profile) {
-        try {
-            const response = await axiosInstance.put('/user/' + auth.value.uuid, profile);
-
-            const data = response.data;
-
-            alert(data.message)
-        } catch (error) {
-            alert(error.message)
-        }
+      return squads.value[0]
     }
 
     return {
-        login,
-        logout,
-        auth,
-        getName,
-        getUuid,
-        $reset,
-        products,
-        fetchProducts,
-        fetchSquads,
-        squads,
-        getSquad,
-        getProduct,
-        updateProfile,
-        setProducts,
-        squadReset,
-        loginByToken
+      login,
+      logout,
+      auth,
+      getName,
+      getUuid,
+      isAdmin,
+      isHead,
+      isMentor,
+      $reset,
+      squads,
+      getSquad,
+      squadReset,
+      loginByToken
     }
-
-},
-    {
-        persist: true
-    }
+  },
+  {
+    persist: true
+  }
 )

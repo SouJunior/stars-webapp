@@ -8,7 +8,7 @@
             Aqui você desenvolve produtos reais e aprimora habilidades práticas para conquistar o
             mercado de trabalho.
           </p>
-          <a href="https://forms.gle/uptNHWPrLn4CgqMf9" target="_blank" rel="noopener noreferrer">
+          <a href="https://forms.gle/uptNHWPrLn4CgqMf9" target="_blank" rel="noopener noreferrer" @click="trackCTA('hero')">
             <v-btn class="font-weight-semibold">Quero fazer parte</v-btn>
           </a>
         </div>
@@ -61,7 +61,7 @@
         <img :src="homeAboutIcon" alt="Sobre a SouJunior Labs" />
       </div>
       <div>
-        <h3>Somos uma iniciativa voluntária comprometida em criar produtos reais.</h3>
+        <h3>Somos uma iniciativa voluntária comprometida em criar produtos reais.</h3>
         <p>
           Nosso propósito é oferecer suporte àqueles que buscam experiência prática, através da
           criação colaborativa de produtos inovadores, assim impulsionando o desenvolvimento
@@ -98,7 +98,7 @@
         <h2>Aqui, todas as áreas são bem-vindas:</h2>
         <div class="occupation-info">
           <p>Participe da nossa comunidade e explore diversas oportunidades disponíveis</p>
-          <a href="https://forms.gle/uptNHWPrLn4CgqMf9" target="_blank" rel="noopener noreferrer">
+          <a href="https://forms.gle/uptNHWPrLn4CgqMf9" target="_blank" rel="noopener noreferrer" @click="trackCTA('occupation')">
             <v-btn class="font-weight-semibold">Quero fazer parte</v-btn>
           </a>
         </div>
@@ -175,8 +175,9 @@
                   href="https://github.com/SouJunior-Labs"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('github')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon1" alt="Github" />
+                  <v-icon icon="mdi-github" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -184,8 +185,9 @@
                   href="https://forms.gle/uptNHWPrLn4CgqMf9"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('discord')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon2" alt="Discord" />
+                  <v-icon icon="fa:fab fa-discord" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -193,8 +195,9 @@
                   href="https://www.linkedin.com/company/soujunior-labs/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('linkedin')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon3" alt="Linkedin" />
+                  <v-icon icon="mdi-linkedin" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -202,8 +205,9 @@
                   href="https://www.instagram.com/soujunior.tech/"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('instagram')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon4" alt="Instagram" />
+                  <v-icon icon="mdi-instagram" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -211,8 +215,9 @@
                   href="https://www.youtube.com/@soujuniortech"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('youtube')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon5" alt="Youtube" />
+                  <v-icon icon="mdi-youtube" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -220,8 +225,9 @@
                   href="https://twitter.com/SouJunior_Tech"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('twitter')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon6" alt="Twitter" />
+                  <v-icon icon="mdi-twitter" size="36" color="white"></v-icon>
                 </a>
               </section>
               <section>
@@ -229,8 +235,9 @@
                   href="https://www.facebook.com/people/SouJunior/100086671131030"
                   target="_blank"
                   rel="noopener noreferrer"
+                  @click="trackSocial('facebook')"
                 >
-                  <v-img height="36" width="36" :src="footerIcon7" alt="Facebook" />
+                  <v-icon icon="mdi-facebook" size="36" color="white"></v-icon>
                 </a>
               </section>
             </div>
@@ -244,6 +251,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Swiper, SwiperSlide } from 'swiper/vue'
+import { event } from 'vue-gtag'
 import 'swiper/css'
 import imgUrl from '@/assets/logo-green-transparent.png'
 import logo_white from '@/assets/logo-white-transparent.png'
@@ -265,20 +273,7 @@ import areaIcon10 from '@/assets/home/areaIcon10.png'
 import areaIcon11 from '@/assets/home/areaIcon11.png'
 import areaIcon12 from '@/assets/home/areaIcon12.png'
 import howToUse from '@/assets/home/howToUse.png'
-import footerIcon1 from '@/assets/home/Github.png'
-import footerIcon2 from '@/assets/home/Discord.png'
-import footerIcon3 from '@/assets/home/Linkedin.png'
-import footerIcon4 from '@/assets/home/Instagram.png'
-import footerIcon5 from '@/assets/home/YouTube.png'
-import footerIcon6 from '@/assets/home/Twitter.png'
-import footerIcon7 from '@/assets/home/Facebook.png'
-import squadIcon1 from '@/assets/home/squadIcon1.png'
-import squadIcon2 from '@/assets/home/squadIcon2.png'
-import djhonantanIcon from '@/assets/home/djhonantan.png'
-import inahyeIcon from '@/assets/home/inahye.png'
-import thaisIcon from '@/assets/home/thais.png'
-import thaynnaIcon from '@/assets/home/thaynna.png'
-import wouernerIcon from '@/assets/home/wouerner.png'
+
 
 const carouselItems = [
   { title: 'Business', icon: areaIcon1 },
@@ -306,40 +301,19 @@ const navigationPrev = () => {
     .concat(carouselItemsRef.value.slice(0, -1))
 }
 
-const teamMembers = [
-  {
-    id: 1,
-    name: 'Djhonantan Parreira',
-    role: 'Front-end Developer',
-    linkedin: 'https://www.linkedin.com/in/djhonantanparreira/',
-    github: 'https://www.github.com/djhonantanparreira',
-    image: djhonantanIcon
-  },
-  {
-    id: 2,
-    name: 'Inahyê Dourado',
-    role: 'Product Manager',
-    linkedin: 'https://www.linkedin.com/in/inahyedourado/',
-    github: 'https://github.com/InahyeDourado',
-    image: inahyeIcon
-  },
-  {
-    id: 3,
-    name: 'Thais Escobar',
-    role: 'Product Manager',
-    linkedin: 'https://www.linkedin.com/in/thais-escobar/',
-    github: 'https://github.com/thaisescobarf',
-    image: thaisIcon
-  },
-  {
-    id: 4,
-    name: 'Thaynná Oliveira',
-    role: 'UI/UX Designer',
-    linkedin: 'https://www.linkedin.com/in/thaygjo/',
-    github: 'https://github.com/thaygjo',
-    image: thaynnaIcon
-  }
-]
+const trackCTA = (location) => {
+  event('cta_click', {
+    event_category: 'engagement',
+    event_label: `Quero fazer parte - ${location}`
+  })
+}
+
+const trackSocial = (platform) => {
+  event('social_click', {
+    event_category: 'social',
+    event_label: platform
+  })
+}
 </script>
 
 <style scoped>

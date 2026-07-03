@@ -1,7 +1,6 @@
 <template>
   <v-container fluid class="pa-0 d-flex align-center justify-center">
     <v-col class="d-flex flex-grow-0 v-col-gap">
-      <img :src="imgUrl" width="auto" height="100%" alt="Logo SouJunior Labs" class="floating" />
       <v-card class="login-form secondary">
         <p>Entrar</p>
         <hr class="mt-1 mb-8" />
@@ -22,9 +21,27 @@
             label="Senha"
             @click:append-inner="visible = !visible"
           />
+          <div class="mt-1 mb-4 text-right">
+            <router-link
+              :to="{ name: 'request-password-reset' }"
+              class="text-caption text-decoration-none text-primary"
+              style="font-family: 'Radio Canada', serif !important; font-weight: 600"
+            >
+              Esqueci minha senha
+            </router-link>
+          </div>
           <hr class="mb-6 mt-3" />
           <v-btn color="primary" type="submit" block @click="submitLogin">Login</v-btn>
-          <v-btn block class="mt-2 cancelButton" :to="{ name: 'registry' }">Registrar</v-btn>
+          <v-btn block class="mt-2 cancelButton" :to="{ name: 'user-register' }">Registrar</v-btn>
+          <div class="mt-4 text-center">
+            <router-link
+              :to="{ name: 'request-edit' }"
+              class="text-body-2 text-decoration-none text-primary"
+              style="font-family: 'Radio Canada', serif !important; font-weight: 600"
+            >
+              Já é voluntário? Edite seu perfil aqui
+            </router-link>
+          </div>
         </v-form>
       </v-card>
     </v-col>
@@ -33,19 +50,20 @@
 
 <script setup>
 import { reactive, ref } from 'vue'
-import imgUrl from '@/assets/logo-green-transparent.png'
 import { useAuthStore } from '@/stores/auth'
+import { event } from 'vue-gtag'
 
 const authStore = useAuthStore()
 
 const user = reactive({
-  email: 'w@w.com',
-  password: '12345678'
+  email: '',
+  password: ''
 })
 
 const submitLogin = async () => {
   try {
     await authStore.login(user)
+    event('login', { method: 'email' })
   } catch (error) {
     console.log(error)
   }
