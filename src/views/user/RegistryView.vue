@@ -640,6 +640,29 @@ function toggleDark() {
   letter-spacing: 0.5px;
 }
 
+.logo-text {
+  font-family: 'Radio Canada', serif !important;
+}
+
+/* Container principal precisa de position relative para ancorar o mascote */
+.container-principal {
+  position: relative;
+}
+
+/* Posicionamento do Mascote */
+.mascote-container {
+  position: absolute;
+  left: 350px;        /* Puxa para fora do card pela esquerda */
+  bottom: 60px;       /* Alinha verticalmente com a área dos termos/botões */
+  z-index: 10;
+}
+
+.mascote-img {
+  width: 160px;
+  height: auto;
+  display: block;
+}
+
 .registration-page-background {
   background-color: rgb(var(--v-theme-background));
   min-height: 100vh;
