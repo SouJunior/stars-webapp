@@ -1,7 +1,7 @@
 <template>
   <v-container fluid class="registration-page-background">
     <v-row align="center" justify="center">
-      <v-col cols="12" md="10" lg="8" xl="6">
+      <v-col cols="12" md="10" lg="8" xl="6" class="container-principal">
         <v-card elevation="4" rounded="lg" class="overflow-hidden">
 
           <!-- Header -->
@@ -291,6 +291,10 @@
             </v-form>
           </v-card-text>
         </v-card>
+
+        <div class="mascote-container">
+          <img src="@/assets/mascote.png" alt="Mascote SouJunior" class="mascote-img" />
+        </div>
       </v-col>
     </v-row>
 
@@ -352,10 +356,6 @@
     </v-dialog>
 
   </v-container>
-
-  <div class="mascote-container">
-  <img src="@/assets/mascote.png" alt="Mascote SouJunior" class="mascote-img" />
-</div>
 
 </template>
 
@@ -652,8 +652,8 @@ function toggleDark() {
 /* Posicionamento do Mascote */
 .mascote-container {
   position: absolute;
-  left: 350px;        /* Puxa para fora do card pela esquerda */
-  bottom: 60px;       /* Alinha verticalmente com a área dos termos/botões */
+  left: -130px;   /* mais negativo = mascote mais pra fora/esquerda do card */
+  bottom: 60px;   /* mais alto = sobe o mascote; mais baixo = desce */
   z-index: 10;
 }
 
