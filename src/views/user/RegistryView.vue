@@ -46,85 +46,97 @@
                 class="mb-4"
               />
 
-              <!-- 2. Área de Atuação -->
-              <div class="mb-4">
-                <div class="d-flex justify-space-between align-center mb-2">
-                  <p class="text-body-2 font-weight-medium">2. Área de Atuação *</p>
-                  <span class="text-caption text-medium-emphasis">Selecione até 3 áreas</span>
-                </div>
+          <!-- 2. Área de Atuação -->
+          <div class="mb-4">
+            <div class="d-flex justify-space-between align-center mb-2">
+              <p class="text-body-2 font-weight-medium">2. Área de Atuação *</p>
+              <span class="text-caption text-medium-emphasis">Selecione até 3 áreas</span>
+            </div>
 
-                <div class="d-flex flex-wrap gap-2">
-                  <v-chip
-                    v-for="area in filteredAreas"
-                    :key="area"
-                    :color="applicant.vertical_ids.includes(area) ? 'primary' : undefined"
-                    :variant="applicant.vertical_ids.includes(area) ? 'flat' : 'outlined'"
-                    size="small"
-                    class="cursor-pointer"
-                    @click="toggleArea(area)"
-                  >
-                    {{ area }}
-                  </v-chip>
-                </div>
+            <div class="d-flex flex-wrap gap-2">
+              <v-chip
+                v-for="area in filteredAreas"
+                :key="area"
+                :color="applicant.vertical_ids.includes(area) ? 'primary' : undefined"
+                :variant="applicant.vertical_ids.includes(area) ? 'flat' : 'outlined'"
+                size="small"
+                class="cursor-pointer"
+                @click="toggleArea(area)"
+              >
+                {{ area }}
+              </v-chip>
+            </div>
 
-                <!-- Front-end sub-block -->
-                <div v-if="applicant.vertical_ids.includes('Front-end')" class="tech-block mt-4 pa-4 rounded">
-                  <p class="text-caption font-weight-bold mb-3">
-                    Tecnologias Front-end
-                    <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
-                  </p>
-                  <v-checkbox
-                    v-for="tech in techsFrontendOptions"
-                    :key="tech"
-                    v-model="applicant.techs_frontend"
-                    :label="tech"
-                    :value="tech"
-                    density="compact"
-                    hide-details
-                    class="mb-1"
-                    color="primary"
-                  />
-                  <v-text-field
-                    v-if="applicant.techs_frontend.includes('Outros')"
-                    v-model="applicant.techs_frontend_outros"
-                    placeholder="Especifique outras tecnologias..."
-                    variant="outlined"
-                    density="compact"
-                    maxlength="100"
-                    class="mt-3"
-                    hide-details
-                  />
-                </div>
+            <p v-if="attemptedSubmit && areasInvalid" class="text-caption text-error mt-1">
+              Selecione ao menos uma área de atuação
+            </p>
 
-                <!-- Back-end sub-block -->
-                <div v-if="applicant.vertical_ids.includes('Back-end')" class="tech-block mt-4 pa-4 rounded">
-                  <p class="text-caption font-weight-bold mb-3">
-                    Tecnologias Back-end
-                    <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
-                  </p>
-                  <v-checkbox
-                    v-for="tech in techsBackendOptions"
-                    :key="tech"
-                    v-model="applicant.techs_backend"
-                    :label="tech"
-                    :value="tech"
-                    density="compact"
-                    hide-details
-                    class="mb-1"
-                    color="primary"
-                  />
-                  <v-text-field
-                    v-if="applicant.techs_backend.includes('Outros')"
-                    v-model="applicant.techs_backend_outros"
-                    placeholder="Especifique outras tecnologias..."
-                    variant="outlined"
-                    density="compact"
-                    maxlength="100"
-                    class="mt-3"
-                    hide-details
-                  />
-                </div>
-              </div>
+            <!-- Front-end sub-block -->
+            <div v-if="applicant.vertical_ids.includes('Front-end')" class="tech-block mt-4 pa-4 rounded">
+              <p class="text-caption font-weight-bold mb-3">
+                Tecnologias Front-end
+                <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
+              </p>
+              <v-checkbox
+                v-for="tech in techsFrontendOptions"
+                :key="tech"
+                v-model="applicant.techs_frontend"
+                :label="tech"
+                :value="tech"
+                density="compact"
+                hide-details
+                class="mb-1"
+                color="primary"
+              />
+              <v-text-field
+                v-if="applicant.techs_frontend.includes('Outros')"
+                v-model="applicant.techs_frontend_outros"
+                placeholder="Especifique outras tecnologias..."
+                variant="outlined"
+                density="compact"
+                maxlength="100"
+                class="mt-3"
+                hide-details
+              />
+
+              <p v-if="attemptedSubmit && frontendTechsInvalid" class="text-caption text-error mt-2">
+                Selecione ao menos uma tecnologia de Front-end
+              </p>
+            </div>
+
+            <!-- Back-end sub-block -->
+            <div v-if="applicant.vertical_ids.includes('Back-end')" class="tech-block mt-4 pa-4 rounded">
+              <p class="text-caption font-weight-bold mb-3">
+                Tecnologias Back-end
+                <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
+              </p>
+              <v-checkbox
+                v-for="tech in techsBackendOptions"
+                :key="tech"
+                v-model="applicant.techs_backend"
+                :label="tech"
+                :value="tech"
+                density="compact"
+                hide-details
+                class="mb-1"
+                color="primary"
+              />
+              <v-text-field
+                v-if="applicant.techs_backend.includes('Outros')"
+                v-model="applicant.techs_backend_outros"
+                placeholder="Especifique outras tecnologias..."
+                variant="outlined"
+                density="compact"
+                maxlength="100"
+                class="mt-3"
+                hide-details
+              />
+
+              <p v-if="attemptedSubmit && backendTechsInvalid" class="text-caption text-error mt-2">
+                Selecione ao menos uma tecnologia de Back-end
+              </p>
+            </div>
+          </div>
 
               <!-- 3. Informações Pessoais -->
               <p class="text-body-2 font-weight-medium mb-3">3. Informações Pessoais</p>
@@ -430,6 +442,27 @@ const techsBackendOptions = [
   'Outros'
 ]
 
+// Controla se deve exibir erro (só aparece depois de tentar enviar)
+const attemptedSubmit = ref(false);
+
+// Validações computadas
+const frontendTechsInvalid = computed(() => {
+  return applicant.vertical_ids.includes('Front-end') && applicant.techs_frontend.length === 0;
+});
+
+const backendTechsInvalid = computed(() => {
+  return applicant.vertical_ids.includes('Back-end') && applicant.techs_backend.length === 0;
+});
+
+const areasInvalid = computed(() => {
+  return applicant.vertical_ids.length === 0;
+});
+
+const validateCustomFields = () => {
+  attemptedSubmit.value = true;
+  return !areasInvalid.value && !frontendTechsInvalid.value && !backendTechsInvalid.value;
+};
+
 
 // ─── Reactive form state ───────────────────────────────────────────────────────
 const applicant = reactive({
@@ -567,6 +600,14 @@ const confirmCancel = () => {
 // ─── Submit ────────────────────────────────────────────────────────────────────
 const submitApplicant = async () => {
   const { valid } = await form.value.validate()
+  const customValid = validateCustomFields()
+
+  if (!valid || !customValid) return
+
+  if (!applicant.terms) {
+    dialogTerms.value = true
+    return
+  }
   if (!valid) return
 
   if (!applicant.terms) {
