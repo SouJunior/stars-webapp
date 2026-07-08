@@ -221,7 +221,7 @@
                     label="Nome da pessoa *"
                     variant="outlined"
                     density="comfortable"
-                    :rules="[(v) => !!v || 'Nome da indicação é obrigatório']"
+                    :rules="[(v) => !!v || 'Nome é obrigatório']"
                   />
                 </v-col>
                 <v-col cols="12" md="6">
@@ -240,7 +240,7 @@
                     placeholder="https://linkedin.com/in/..."
                     variant="outlined"
                     density="comfortable"
-                    :rules="[(v) => !!v || 'LinkedIn da indicação é obrigatório']"
+                    :rules="linkedinRules"
                   />
                 </v-col>
               </v-row>
