@@ -129,35 +129,37 @@
               <!-- 3. Informações Pessoais -->
               <p class="text-body-2 font-weight-medium mb-3">3. Informações Pessoais</p>
               <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="applicant.name"
-                    label="Nome Completo *"
-                    placeholder="Preencha seu nome completo"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'Nome é obrigatório']"
-                  />
-                </v-col>
+                <!-- Coluna esquerda: Nome em cima, Email embaixo -->
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.email"
-                    label="Email *"
-                    placeholder="your.email@example.com"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="emailRules"
-                  />
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field v-model="applicant.name"
+                       label="Nome Completo *"
+                        placeholder="Preencha seu nome completo"
+                         variant="outlined"
+                          density="comfortable"
+                        :rules="[(v) => !!v || 'Nome é obrigatório']" />
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field v-model="applicant.email"
+                       label="Email *"
+                        placeholder="your.email@example.com"
+                        variant="outlined"
+                         density="comfortable"
+                          :rules="emailRules" />
+                    </v-col>
+                  </v-row>
                 </v-col>
+
+                <!-- Coluna direita: WhatsApp -->
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.phone"
-                    label="WhatsApp *"
-                    placeholder="+55 (11) 99999-9999"
-                    variant="outlined"
+                  <v-text-field v-model="whatsappFormatted"
+                   label="WhatsApp *" 
+                   variant="outlined"
                     density="comfortable"
-                    :rules="[(v) => !!v || 'WhatsApp é obrigatório']"
-                  />
+                    :rules="phoneRules" 
+                    placeholder="Preencha seu WhatsApp"
+                     maxlength="15" />
                 </v-col>
               </v-row>
 
@@ -467,6 +469,34 @@ const linkedinRules = [
     /^https?:\/\/(www\.)?linkedin\.com\/in\/.+/.test(v) ||
     'Informe uma URL de LinkedIn válida'
 ]
+
+const phoneRules = [
+  (v) => !!v || 'WhatsApp é obrigatório',
+  (v) =>
+    /^\(\d{2}\)\s\d{5}-\d{4}$/.test(v) ||
+    'Informe um número de WhatsApp válido',
+];
+
+const whatsappFormatted = computed({
+  get() {
+    return applicant.whatsapp;
+  },
+  set(value) {
+    if (!value) {
+      applicant.whatsapp = '';
+      return;
+    }
+
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+
+    let formatted = '';
+    if (digits.length > 0) formatted = '(' + digits.slice(0, 2);
+    if (digits.length > 2) formatted += ') ' + digits.slice(2, 7);
+    if (digits.length > 7) formatted += '-' + digits.slice(7, 11);
+
+    applicant.whatsapp = formatted;
+  },
+});
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 const toggleArea = (area) => {
