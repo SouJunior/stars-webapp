@@ -16,35 +16,21 @@
           </div>
 
           <!-- Form Body -->
-           <!--ajustado para melhorar a opacidade do warning--> 
+          <!--ajustado para melhorar a opacidade do warning-->
           <v-card-text class="pa-4 pa-md-8">
             <h2 class="text-subtitle-1 font-weight-bold text-primary mb-1">Cadastro de voluntário</h2>
-            <v-alert
-            variant="flat"
-            color="orange-lighten-5"
-            icon="mdi-alert-circle-outline"
-            density="compact"
-            class="mb-6 text-caption text-orange-darken-4 border-sm border-orange-lighten-3 rounded-lg font-weight-medium"
-          >
-            Campos de preenchimento obrigatório (*)
-          </v-alert>
+            <v-alert variant="flat" color="orange-lighten-5" icon="mdi-alert-circle-outline" density="compact"
+              class="mb-6 text-caption text-orange-darken-4 border-sm border-orange-lighten-3 rounded-lg font-weight-medium">
+              Campos de preenchimento obrigatório (*)
+            </v-alert>
 
             <v-form ref="form" @submit.prevent="submitApplicant">
 
               <!-- 1. Tipo de Voluntário -->
               <p class="text-body-2 font-weight-medium mb-2">1. Tipo de voluntário *</p>
-              <v-select
-                v-model="applicant.jobtitle_id"
-                :items="volunteerTypes"
-                item-title="label"
-                item-value="id"
-                placeholder="Selecionar"
-                variant="outlined"
-                density="comfortable"
-                append-inner-icon="mdi-chevron-right"
-                :rules="[(v) => !!v || 'Selecione um tipo de voluntário']"
-                class="mb-4"
-              />
+              <v-select v-model="applicant.jobtitle_id" :items="volunteerTypes" item-title="label" item-value="id"
+                placeholder="Selecionar" variant="outlined" density="comfortable" append-inner-icon="mdi-chevron-right"
+                :rules="[(v) => !!v || 'Selecione um tipo de voluntário']" class="mb-4" />
 
               <!-- 2. Área de Atuação -->
               <div class="mb-4">
@@ -54,15 +40,10 @@
                 </div>
 
                 <div class="d-flex flex-wrap gap-2">
-                  <v-chip
-                    v-for="area in filteredAreas"
-                    :key="area"
+                  <v-chip v-for="area in filteredAreas" :key="area"
                     :color="applicant.vertical_ids.includes(area) ? 'primary' : undefined"
-                    :variant="applicant.vertical_ids.includes(area) ? 'flat' : 'outlined'"
-                    size="small"
-                    class="cursor-pointer"
-                    @click="toggleArea(area)"
-                  >
+                    :variant="applicant.vertical_ids.includes(area) ? 'flat' : 'outlined'" size="small"
+                    class="cursor-pointer" @click="toggleArea(area)">
                     {{ area }}
                   </v-chip>
                 </div>
@@ -73,27 +54,11 @@
                     Tecnologias Front-end
                     <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
                   </p>
-                  <v-checkbox
-                    v-for="tech in techsFrontendOptions"
-                    :key="tech"
-                    v-model="applicant.techs_frontend"
-                    :label="tech"
-                    :value="tech"
-                    density="compact"
-                    hide-details
-                    class="mb-1"
-                    color="primary"
-                  />
-                  <v-text-field
-                    v-if="applicant.techs_frontend.includes('Outros')"
-                    v-model="applicant.techs_frontend_outros"
-                    placeholder="Especifique outras tecnologias..."
-                    variant="outlined"
-                    density="compact"
-                    maxlength="100"
-                    class="mt-3"
-                    hide-details
-                  />
+                  <v-checkbox v-for="tech in techsFrontendOptions" :key="tech" v-model="applicant.techs_frontend"
+                    :label="tech" :value="tech" density="compact" hide-details class="mb-1" color="primary" />
+                  <v-text-field v-if="applicant.techs_frontend.includes('Outros')"
+                    v-model="applicant.techs_frontend_outros" placeholder="Especifique outras tecnologias..."
+                    variant="outlined" density="compact" maxlength="100" class="mt-3" hide-details />
                 </div>
 
                 <!-- Back-end sub-block -->
@@ -102,62 +67,36 @@
                     Tecnologias Back-end
                     <span class="text-medium-emphasis font-weight-regular ml-2">Múltipla escolha</span>
                   </p>
-                  <v-checkbox
-                    v-for="tech in techsBackendOptions"
-                    :key="tech"
-                    v-model="applicant.techs_backend"
-                    :label="tech"
-                    :value="tech"
-                    density="compact"
-                    hide-details
-                    class="mb-1"
-                    color="primary"
-                  />
-                  <v-text-field
-                    v-if="applicant.techs_backend.includes('Outros')"
-                    v-model="applicant.techs_backend_outros"
-                    placeholder="Especifique outras tecnologias..."
-                    variant="outlined"
-                    density="compact"
-                    maxlength="100"
-                    class="mt-3"
-                    hide-details
-                  />
+                  <v-checkbox v-for="tech in techsBackendOptions" :key="tech" v-model="applicant.techs_backend"
+                    :label="tech" :value="tech" density="compact" hide-details class="mb-1" color="primary" />
+                  <v-text-field v-if="applicant.techs_backend.includes('Outros')"
+                    v-model="applicant.techs_backend_outros" placeholder="Especifique outras tecnologias..."
+                    variant="outlined" density="compact" maxlength="100" class="mt-3" hide-details />
                 </div>
               </div>
 
               <!-- 3. Informações Pessoais -->
               <p class="text-body-2 font-weight-medium mb-3">3. Informações Pessoais</p>
               <v-row>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="applicant.name"
-                    label="Nome Completo *"
-                    placeholder="Preencha seu nome completo"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'Nome é obrigatório']"
-                  />
-                </v-col>
+                <!-- Coluna esquerda: Nome em cima, Email embaixo -->
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.email"
-                    label="Email *"
-                    placeholder="your.email@example.com"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="emailRules"
-                  />
+                  <v-row>
+                    <v-col cols="12">
+                      <v-text-field v-model="applicant.name" label="Nome Completo *"
+                        placeholder="Preencha seu nome completo" variant="outlined" density="comfortable"
+                        :rules="[(v) => !!v || 'Nome é obrigatório']" />
+                    </v-col>
+                    <v-col cols="12">
+                      <v-text-field v-model="applicant.email" label="Email *" placeholder="your.email@example.com"
+                        variant="outlined" density="comfortable" :rules="emailRules" />
+                    </v-col>
+                  </v-row>
                 </v-col>
+
+                <!-- Coluna direita: WhatsApp -->
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.phone"
-                    label="WhatsApp *"
-                    placeholder="+55 (11) 99999-9999"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'WhatsApp é obrigatório']"
-                  />
+                  <v-text-field v-model="whatsappFormatted" label="WhatsApp *" variant="outlined" density="comfortable"
+                    :rules="phoneRules" placeholder="Preencha seu WhatsApp" maxlength="15" />
                 </v-col>
               </v-row>
 
@@ -165,99 +104,53 @@
               <p class="text-body-2 font-weight-medium mb-3 mt-2">4. Perfil Profissional</p>
               <v-row>
                 <v-col cols="12">
-                  <v-text-field
-                    v-model="applicant.linkedin"
-                    label="LinkedIn *"
-                    placeholder="https://linkedin.com/in/seu-perfil"
-                    variant="outlined"
-                    density="comfortable"
-                    prepend-inner-icon="mdi-linkedin"
-                    :rules="linkedinRules"
-                  />
+                  <v-text-field v-model="applicant.linkedin" label="LinkedIn *"
+                    placeholder="https://linkedin.com/in/seu-perfil" variant="outlined" density="comfortable"
+                    prepend-inner-icon="mdi-linkedin" :rules="linkedinRules" />
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.github"
-                    label="Github (Opcional)"
-                    placeholder="Nome de Usuário"
-                    variant="outlined"
-                    density="comfortable"
-                    prepend-inner-icon="mdi-github"
-                  />
+                  <v-text-field v-model="applicant.github" label="Github (Opcional)" placeholder="Nome de Usuário"
+                    variant="outlined" density="comfortable" prepend-inner-icon="mdi-github" />
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.discord"
-                    label="Discord (Opcional)"
-                    placeholder="Nome de Usuário"
-                    variant="outlined"
-                    density="comfortable"
-                    prepend-inner-icon="mdi-discord"
-                  />
+                  <v-text-field v-model="applicant.discord" label="Discord (Opcional)" placeholder="Nome de Usuário"
+                    variant="outlined" density="comfortable" prepend-inner-icon="mdi-discord" />
                 </v-col>
               </v-row>
-              
+
 
               <!-- 5. Indicação -->
               <p class="text-body-2 font-weight-medium mb-2 mt-2">5. Indicação</p>
               <p class="text-caption text-medium-emphasis mb-3">Você foi indicado(a) por alguém da SouJunior?</p>
 
-              <v-btn-toggle
-                v-model="applicant.was_referred"
-                mandatory
-                density="compact"
-                class="mb-4"
-              >
+              <v-btn-toggle v-model="applicant.was_referred" mandatory density="compact" class="mb-4">
                 <v-btn value="sim" variant="outlined" size="small">Sim</v-btn>
                 <v-btn value="nao" variant="outlined" size="small" color="primary">Não</v-btn>
               </v-btn-toggle>
 
               <v-row v-if="applicant.was_referred === 'sim'" class="mt-0">
                 <v-col cols="12">
-                  <v-text-field
-                    v-model="applicant.referred_by_name"
-                    label="Nome da pessoa *"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'Nome da indicação é obrigatório']"
-                  />
+                  <v-text-field v-model="applicant.referred_by_name" label="Nome da pessoa *" variant="outlined"
+                    density="comfortable" :rules="[(v) => !!v || 'Nome da indicação é obrigatório']" />
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.referred_by_position"
-                    label="Cargo *"
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'Cargo da indicação é obrigatório']"
-                  />
+                  <v-text-field v-model="applicant.referred_by_position" label="Cargo *" variant="outlined"
+                    density="comfortable" :rules="[(v) => !!v || 'Cargo da indicação é obrigatório']" />
                 </v-col>
                 <v-col cols="12" md="6">
-                  <v-text-field
-                    v-model="applicant.referred_by_linkedin"
-                    label="LinkedIn da indicação *"
-                    placeholder="https://linkedin.com/in/..."
-                    variant="outlined"
-                    density="comfortable"
-                    :rules="[(v) => !!v || 'LinkedIn da indicação é obrigatório']"
-                  />
+                  <v-text-field v-model="applicant.referred_by_linkedin" label="LinkedIn da indicação *"
+                    placeholder="https://linkedin.com/in/..." variant="outlined" density="comfortable"
+                    :rules="[(v) => !!v || 'LinkedIn da indicação é obrigatório']" />
                 </v-col>
               </v-row>
 
               <!-- Terms checkbox -->
-              <v-checkbox
-                v-model="applicant.terms"
-                color="primary"
-                hide-details
-                class="mt-2 mb-6"
-              >
+              <v-checkbox v-model="applicant.terms" color="primary" hide-details class="mt-2 mb-6">
                 <template #label>
                   <span class="text-body-2">
                     Eu aceito e concordo com os termos de condição
-                    <a
-                      href="#"
-                      class="text-primary font-weight-bold text-decoration-none"
-                      @click.prevent.stop="dialogTerms = true"
-                    >
+                    <a href="#" class="text-primary font-weight-bold text-decoration-none"
+                      @click.prevent.stop="dialogTerms = true">
                       Termos e condições *
                     </a>
                   </span>
@@ -266,24 +159,12 @@
 
               <!-- Action buttons -->
               <div class="d-flex justify-center gap-4 flex-wrap">
-                <v-btn
-                  variant="outlined"
-                  color="secondary"
-                  size="large"
-                  rounded="pill"
-                  class="px-8"
-                  @click="dialogCancel = true"
-                >
+                <v-btn variant="outlined" color="secondary" size="large" rounded="pill" class="px-8"
+                  @click="dialogCancel = true">
                   Cancelar
                 </v-btn>
-                <v-btn
-                  color="primary"
-                  size="large"
-                  rounded="pill"
-                  class="px-8"
-                  :loading="loading"
-                  @click="submitApplicant"
-                >
+                <v-btn color="primary" size="large" rounded="pill" class="px-8" :loading="loading"
+                  @click="submitApplicant">
                   Cadastrar
                 </v-btn>
               </div>
@@ -468,6 +349,35 @@ const linkedinRules = [
     'Informe uma URL de LinkedIn válida'
 ]
 
+const whatsappFormatted = computed({
+  get() {
+    return applicant.whatsapp;
+  },
+  set(value) {
+    if (!value) {
+      applicant.whatsapp = '';
+      return;
+    }
+
+    const digits = value.replace(/\D/g, '').slice(0, 11);
+
+    let formatted = '';
+    if (digits.length > 0) formatted = '(' + digits.slice(0, 2);
+    if (digits.length > 2) formatted += ') ' + digits.slice(2, 7);
+    if (digits.length > 7) formatted += '-' + digits.slice(7, 11);
+
+    applicant.whatsapp = formatted;
+  },
+});
+
+const phoneRules = [
+  (v) => !!v || 'WhatsApp é obrigatório',
+  (v) =>
+    /^\(\d{2}\)\s\d{5}-\d{4}$/.test(v) ||
+    'Informe um número de WhatsApp válido',
+];
+
+
 // ─── Helpers ───────────────────────────────────────────────────────────────────
 const toggleArea = (area) => {
   const idx = applicant.vertical_ids.indexOf(area)
@@ -539,16 +449,16 @@ const submitApplicant = async () => {
   // Merge "Outros" free text into the tech arrays
   const frontendTechs = applicant.techs_frontend.includes('Outros')
     ? [
-        ...applicant.techs_frontend.filter((t) => t !== 'Outros'),
-        applicant.techs_frontend_outros.trim()
-      ].filter(Boolean)
+      ...applicant.techs_frontend.filter((t) => t !== 'Outros'),
+      applicant.techs_frontend_outros.trim()
+    ].filter(Boolean)
     : [...applicant.techs_frontend]
 
   const backendTechs = applicant.techs_backend.includes('Outros')
     ? [
-        ...applicant.techs_backend.filter((t) => t !== 'Outros'),
-        applicant.techs_backend_outros.trim()
-      ].filter(Boolean)
+      ...applicant.techs_backend.filter((t) => t !== 'Outros'),
+      applicant.techs_backend_outros.trim()
+    ].filter(Boolean)
     : [...applicant.techs_backend]
 
   const verticalMapping = {
@@ -559,53 +469,53 @@ const submitApplicant = async () => {
   }
 
   const prepararTechsDinamicas = () => {
-  const listaDeTechs = [];
+    const listaDeTechs = [];
 
-  // Se houver tecnologias de front-end selecionadas, joga na lista
-  if (frontendTechs && frontendTechs.length > 0) {
-    frontendTechs.forEach(tech => listaDeTechs.push({ area: 'frontend', tech }));
-  }
+    // Se houver tecnologias de front-end selecionadas, joga na lista
+    if (frontendTechs && frontendTechs.length > 0) {
+      frontendTechs.forEach(tech => listaDeTechs.push({ area: 'frontend', tech }));
+    }
 
-  // Se houver tecnologias de back-end selecionadas, joga na lista
-  if (backendTechs && backendTechs.length > 0) {
-    backendTechs.forEach(tech => listaDeTechs.push({ area: 'backend', tech }));
-  }
+    // Se houver tecnologias de back-end selecionadas, joga na lista
+    if (backendTechs && backendTechs.length > 0) {
+      backendTechs.forEach(tech => listaDeTechs.push({ area: 'backend', tech }));
+    }
 
-  // OBS: Como DevOps e QA ainda não têm inputs de texto na tela, 
-  // eles não entram aqui por enquanto, mas a estrutura já fica pronta!
+    // OBS: Como DevOps e QA ainda não têm inputs de texto na tela, 
+    // eles não entram aqui por enquanto, mas a estrutura já fica pronta!
 
-  return listaDeTechs;
-};
+    return listaDeTechs;
+  };
 
   const payload = {
-  name: applicant.name,
-  email: applicant.email,
-  phone: applicant.phone || null,
-  linkedin: applicant.linkedin,
-  github: applicant.github || null,
-  discord: applicant.discord || null,
-  jobtitle_id: applicant.jobtitle_id,
-  
-  // Transforma os nomes das tags clicadas (ex: 'DevOps', 'QA') nos IDs correspondentes
-  vertical_ids: applicant.vertical_ids.map(name => verticalMapping[name]).filter(Boolean),
-  
-  // Mudança aqui: Enviamos o array unificado em vez de 'techs_frontend' e 'techs_backend' separados
-  techs: prepararTechsDinamicas(),
-  
-  terms_accepted: applicant.terms,
-  is_active: true,
-  ...(applicant.was_referred === 'sim'
-    ? {
+    name: applicant.name,
+    email: applicant.email,
+    phone: applicant.phone || null,
+    linkedin: applicant.linkedin,
+    github: applicant.github || null,
+    discord: applicant.discord || null,
+    jobtitle_id: applicant.jobtitle_id,
+
+    // Transforma os nomes das tags clicadas (ex: 'DevOps', 'QA') nos IDs correspondentes
+    vertical_ids: applicant.vertical_ids.map(name => verticalMapping[name]).filter(Boolean),
+
+    // Mudança aqui: Enviamos o array unificado em vez de 'techs_frontend' e 'techs_backend' separados
+    techs: prepararTechsDinamicas(),
+
+    terms_accepted: applicant.terms,
+    is_active: true,
+    ...(applicant.was_referred === 'sim'
+      ? {
         referred_by_name: applicant.referred_by_name,
         referred_by_position: applicant.referred_by_position,
         referred_by_linkedin: applicant.referred_by_linkedin
       }
-    : {
+      : {
         referred_by_name: null,
         referred_by_position: null,
         referred_by_linkedin: null
       })
-}
+  }
 
   try {
     loading.value = true
@@ -652,8 +562,10 @@ function toggleDark() {
 /* Posicionamento do Mascote */
 .mascote-container {
   position: absolute;
-  left: -130px;   /* mais negativo = mascote mais pra fora/esquerda do card */
-  bottom: 60px;   /* mais alto = sobe o mascote; mais baixo = desce */
+  left: -130px;
+  /* mais negativo = mascote mais pra fora/esquerda do card */
+  bottom: 60px;
+  /* mais alto = sobe o mascote; mais baixo = desce */
   z-index: 10;
 }
 
@@ -677,5 +589,4 @@ function toggleDark() {
 .cursor-pointer {
   cursor: pointer;
 }
-
 </style>
