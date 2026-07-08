@@ -326,36 +326,44 @@
     </v-dialog>
 
     <!-- ─── Dialog: Alerta de Desistência ─── -->
-    <v-dialog v-model="dialogCancel" max-width="440">
-      <v-card rounded="lg">
-        <v-card-title class="text-h6 pa-4">Deseja mesmo cancelar?</v-card-title>
-        <v-card-text class="text-body-2 px-4 pb-2">
-          Seu progresso será perdido e você voltará à página inicial.
-        </v-card-text>
-        <v-card-actions class="pa-4 justify-end">
-          <v-btn variant="text" @click="dialogCancel = false">Voltar</v-btn>
-          <v-btn color="error" variant="elevated" @click="confirmCancel">Sim, cancelar</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          <v-dialog v-model="dialogCancel" max-width="440">
+        <v-card rounded="lg" class="pa-2">
+          <v-card-title class="text-h6 font-weight-bold pa-4 text-wrap text-primary">
+            Tem certeza de que deseja <br> desistir do cadastro?
+          </v-card-title>
+          
+          <v-card-text class="text-body-2 px-4 pb-2 text-medium-emphasis text-disabled">
+            Todas as informações preenchidas serão perdidas
+          </v-card-text>
+          
+          <v-card-actions class="pa-4 justify-end">
+            <v-btn class="text-none font-weight-bold" variant="outlined" color="primary" @click="dialogCancel = false">
+              Não continuar
+            </v-btn>
+            <v-btn class="text-none font-weight-bold" color="primary" variant="elevated" @click="confirmCancel">
+              Continuar
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
 
-    <!-- ─── Dialog: Sucesso ─── -->
-    <v-dialog v-model="dialogSuccess" max-width="480" persistent>
-      <v-card rounded="lg" class="text-center pa-8">
-        <v-icon size="80" color="success" class="mb-4">mdi-check-circle-outline</v-icon>
-        <v-card-title class="text-h5 font-weight-bold text-success justify-center">
-          Cadastro Realizado!
-        </v-card-title>
-        <v-card-text class="text-body-2 text-medium-emphasis">
-          Seu registro foi efetuado com sucesso. Você receberá um e-mail de confirmação em breve.
-        </v-card-text>
-        <v-card-actions class="justify-center">
-          <v-btn color="primary" variant="elevated" rounded="pill" :to="{ name: 'home' }" @click="resetForm">
-            Voltar ao início
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
+          <!-- ─── Dialog: Sucesso ─── -->
+          <v-dialog v-model="dialogSuccess" max-width="480" persistent>
+            <v-card rounded="lg" class="text-center pa-8">
+              <v-icon size="80" color="success" class="mb-4">mdi-check-circle-outline</v-icon>
+              <v-card-title class="text-h5 font-weight-bold text-success justify-center">
+                Cadastro Realizado!
+              </v-card-title>
+              <v-card-text class="text-body-2 text-medium-emphasis">
+                Seu registro foi efetuado com sucesso. Você receberá um e-mail de confirmação em breve.
+              </v-card-text>
+              <v-card-actions class="justify-center">
+                <v-btn color="primary" variant="elevated" rounded="pill" :to="{ name: 'home' }" @click="resetForm">
+                  Voltar ao início
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
 
   </v-container>
 
