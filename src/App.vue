@@ -2,48 +2,50 @@
   <v-app :class="ef">
     <v-navigation-drawer v-model="drawer" temporary class="d-md-none">
       <v-list>
-        <v-list-item v-if="logged === true && auth.isMentor()" :to="{ name: 'onboarding' }">
-          <v-list-item-title>Onboarding</v-list-item-title>
-        </v-list-item>
-        <v-list-item :to="{ name: 'dashboard' }">
-          <v-list-item-title>Dashboard</v-list-item-title>
-        </v-list-item>
-        <v-list-item v-if="logged === true && auth.isMentor()" :to="{ name: 'volunteers' }">
-          <v-list-item-title>Voluntários</v-list-item-title>
-        </v-list-item>
-        <template v-if="logged === true">
-          <v-list-item :to="{ name: 'squads-list' }">
-            <v-list-item-title>Squads</v-list-item-title>
+        <template v-if="!isRegistryFlow">
+          <v-list-item v-if="logged === true && auth.isMentor()" :to="{ name: 'onboarding' }">
+            <v-list-item-title>Onboarding</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="{ name: 'projects-list' }">
-            <v-list-item-title>Projetos</v-list-item-title>
+          <v-list-item :to="{ name: 'dashboard' }">
+            <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="{ name: 'jobs-list' }">
-            <v-list-item-title>Vagas</v-list-item-title>
+          <v-list-item v-if="logged === true && auth.isMentor()" :to="{ name: 'volunteers' }">
+            <v-list-item-title>Voluntários</v-list-item-title>
           </v-list-item>
-          <v-list-item :to="{ name: 'verticals-list' }">
-            <v-list-item-title>Verticais</v-list-item-title>
-          </v-list-item>
-        </template>
-        <template v-else>
-          <v-list-item :to="{ name: 'registry' }">
-            <v-list-item-title>Registro</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="{ name: 'search' }">
-            <v-list-item-title>Pesquise</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="{ name: 'jobs-list' }">
-            <v-list-item-title>Vagas</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="{ name: 'squads-list' }">
-            <v-list-item-title>Squads</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="{ name: 'verticals-list' }">
-            <v-list-item-title>Verticais</v-list-item-title>
-          </v-list-item>
-          <v-list-item :to="{ name: 'projects-list' }">
-            <v-list-item-title>Projetos</v-list-item-title>
-          </v-list-item>
+          <template v-if="logged === true">
+            <v-list-item :to="{ name: 'squads-list' }">
+              <v-list-item-title>Squads</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'projects-list' }">
+              <v-list-item-title>Projetos</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'jobs-list' }">
+              <v-list-item-title>Vagas</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'verticals-list' }">
+              <v-list-item-title>Verticais</v-list-item-title>
+            </v-list-item>
+          </template>
+          <template v-else>
+            <v-list-item :to="{ name: 'registry' }">
+              <v-list-item-title>Registro</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'search' }">
+              <v-list-item-title>Pesquise</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'jobs-list' }">
+              <v-list-item-title>Vagas</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'squads-list' }">
+              <v-list-item-title>Squads</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'verticals-list' }">
+              <v-list-item-title>Verticais</v-list-item-title>
+            </v-list-item>
+            <v-list-item :to="{ name: 'projects-list' }">
+              <v-list-item-title>Projetos</v-list-item-title>
+            </v-list-item>
+          </template>
         </template>
       </v-list>
     </v-navigation-drawer>
@@ -57,17 +59,45 @@
     >
       <div class="w-100 d-flex align-center justify-space-between main-container">
         <div class="d-flex align-center">
-          <v-app-bar-nav-icon class="d-md-none" @click="drawer = !drawer"></v-app-bar-nav-icon>
-          <router-link :to="{ name: 'home' }" class="d-flex align-center logo text-decoration-none">
+          <!-- AS 3 BARRINHAS: Agora só aparecem se NÃO for o fluxo de registro -->
+          <v-app-bar-nav-icon 
+            v-if="!isRegistryFlow" 
+            class="d-md-none" 
+            @click="drawer = !drawer"
+          ></v-app-bar-nav-icon>
+          
+          <router-link
+            :to="{ name: 'home' }"
+            class="d-flex align-center logo text-decoration-none ga-2"
+            :class="{ 'logo-centered': isRegistryFlow }"
+          >
+            <!-- Ícone/Símbolo oficial da marca -->
+            <v-img
+              :src="logoSjHeader"
+              alt="Símbolo SouJunior"
+              width="32"
+              height="32"
+              contain
+              class="drag-none"
+            />
+
+           <h1
+              v-if="isRegistryFlow"
+              class="logo-brand-text mb-0"
+            >
+              <span class="font-normal">Sou</span><span class="font-bold">Junior</span>
+            </h1>
             <h1
-              class="d-none d-sm-block text-h5 font-weight-bold font-semibold primary-color ml-3 logo-text"
+              v-else
+              class="text-h5 font-weight-bold font-semibold primary-color logo-text mb-0"
             >
               Stars
             </h1>
           </router-link>
         </div>
 
-        <div class="d-none d-md-flex align-center ga-2">
+        <!-- Itens de navegação Desktop -->
+        <div v-if="!isRegistryFlow" class="d-none d-md-flex align-center ga-2">
           <v-btn
             v-if="logged === true && auth.isMentor()"
             variant="text"
@@ -173,6 +203,7 @@
           </v-btn>
         </div>
 
+        <!-- Lado Direito: Botão do Tema e Menu de Usuário -->
         <div class="d-flex align-center ga-2">
           <v-btn
             :icon="isDark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
@@ -210,7 +241,6 @@
         </div>
       </div>
     </v-app-bar>
-
     <transition name="fade" mode="out-in">
       <v-main
         :style="
@@ -242,6 +272,7 @@ import { RouterView, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import { useSnackbarStore } from '@/stores/snackbar'
 import { useTheme } from 'vuetify'
+import logoSjHeader from '@/assets/logo-sj-header.png'
 
 const snackbarStore = useSnackbarStore()
 
@@ -252,6 +283,10 @@ const route = useRoute()
 const drawer = ref(false)
 
 const logged = computed(() => auth.getName() != '')
+
+// Quando true, esconde todos os links de navegação (drawer + desktop),
+// mantendo apenas logo, nav-icon, toggle de tema e menu de avatar visíveis.
+const isRegistryFlow = computed(() => route.name === 'registry')
 
 console.log('logged', route.path)
 const ef = computed(() => (route.path === '/' ? 'homeBackgroundEffect' : ''))
@@ -292,6 +327,7 @@ function toggleDark() {
 }
 
 .main-container {
+  position: relative;
   margin-left: 240px;
   margin-right: 240px;
   padding: 0;
@@ -322,6 +358,16 @@ function toggleDark() {
   }
 }
 
+// Ativa só quando isRegistryFlow === true (tela de Registro).
+// Centraliza a marca no app-bar independente do conteúdo
+// restante nos blocos à esquerda e à direita.
+.logo-centered {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .drag-none {
   user-select: none;
   -moz-drag-over: none;
@@ -332,4 +378,27 @@ function toggleDark() {
   font-family: 'Radio Canada', serif !important;
 }
 
+// Cor de destaque para "Junior" no logotipo bicolor "SouJunior",
+// exibido apenas na tela de Registro.
+.souJunior-accent {
+  color: #5b8def;
+}
+
+.logo-brand-text {
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+  font-weight: 400 !important; /* Peso normal do protótipo */
+  font-size: 22px !important;   /* Tamanho alinhado com o ícone */
+  letter-spacing: -0.3px;
+  color: #3b82f6;
+  }
+
+  /* "Sou" com o peso normal/leve do protótipo */
+.logo-brand-text .font-normal {
+  font-weight: 400 !important;
+}
+
+/* "Junior" com o peso em negrito marcante */
+.logo-brand-text .font-bold {
+  font-weight: 700 !important;
+}
 </style>
