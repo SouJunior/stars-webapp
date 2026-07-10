@@ -199,80 +199,116 @@
           </div>
 
               <!-- 3. Informações Pessoais -->
-              <p class="text-body-2 font-weight-bold mb-3">3. Informações Pessoais <span class='asterisco'>*</span> </p>
-              <v-row>
-                <!-- Coluna esquerda: Nome em cima, Email embaixo -->
-                <v-col cols="12" md="6">
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field v-model="applicant.name"
-                       label="Nome Completo "
-                        placeholder="Preencha seu nome completo"
-                         variant="outlined"
-                          density="comfortable"
-                        :rules="[(v) => !!v || 'Nome é obrigatório']" />
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field v-model="applicant.email"
-                       label="Email"
-                        placeholder="your.email@example.com"
-                        variant="outlined"
-                         density="comfortable"
-                          :rules="emailRules" />
-                    </v-col>
-                  </v-row>
+              <p class="text-body-2 font-weight-bold mb-4">3. Informações Pessoais <span class='asterisco'>*</span></p>
+              
+              <v-row class="ma-0">
+                <v-col cols="12" class="pa-0 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    Nome Completo <span class="text-red">*</span>
+                  </label>
+                  <v-text-field 
+                    v-model="applicant.name"
+                    placeholder="Preencha seu nome completo"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="[(v) => !!v || 'Nome é obrigatório']"
+                    validate-on="lazy submit"
+                    hide-details="auto"
+                  />
                 </v-col>
 
-                <!-- Coluna direita: WhatsApp -->
-                <v-col cols="12" md="6">
-                  <v-text-field v-model="whatsappFormatted"
-                   label="WhatsApp" 
-                   variant="outlined"
+                <v-col cols="12" md="6" class="pa-0 pr-md-2 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    Email <span class="text-red">*</span>
+                  </label>
+                  <v-text-field 
+                    v-model="applicant.email"
+                    placeholder="your.email@example.com"
+                    variant="outlined"
+                    density="comfortable"
+                    :rules="emailRules"
+                    validate-on="lazy submit"
+                    hide-details="auto"
+                  />
+                </v-col>
+
+                <v-col cols="12" md="6" class="pa-0 pl-md-2 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    WhatsApp <span class="text-red">*</span>
+                  </label>
+                  <v-text-field 
+                    v-model="whatsappFormatted"
+                    placeholder="+55 (11) 99999-9999"
+                    variant="outlined"
                     density="comfortable"
                     :rules="phoneRules" 
-                    placeholder="Preencha seu WhatsApp"
-                     maxlength="15" />
+                    maxlength="15"
+                    validate-on="lazy submit"
+                    hide-details="auto"
+                  />
                 </v-col>
               </v-row>
 
-              <!-- 4. Perfil Profissional -->
-              <p class="text-body-2 font-weight-bold mb-3 mt-2">4. Perfil Profissional</p>
-              <v-row>
-                <v-col cols="12">
+             <!-- 4. Perfil Profissional -->
+              <p class="text-body-2 font-weight-bold mb-4 mt-2">4. Perfil Profissional</p>
+              
+              <v-row class="ma-0">
+                <!-- LinkedIn (Ocupa a linha toda) -->
+                <v-col cols="12" class="pa-0 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    LinkedIn <span class="text-red">*</span>
+                  </label>
                   <v-text-field
                     v-model="applicant.linkedin"
-                    label="LinkedIn *"
                     placeholder="https://linkedin.com/in/seu-perfil"
                     variant="outlined"
                     density="comfortable"
                     prepend-inner-icon="mdi-linkedin"
                     :rules="linkedinRules"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+
+                <!-- Github (Opcional - Lado esquerdo) -->
+                <v-col cols="12" md="6" class="pa-0 pr-md-2 mb-4">
+                  <div class="d-flex align-center mb-1">
+                    <label class="text-caption font-weight-medium text-grey-darken-3">Github</label>
+                    <span class="text-caption text-grey ml-1">(Opcional)</span>
+                    <v-icon size="16" class="text-grey ml-1" title="Digite apenas o seu nome de usuário">mdi-information-outline</v-icon>
+                  </div>
                   <v-text-field
                     v-model="applicant.github"
-                    label="Github (Opcional)"
                     placeholder="Nome de Usuário"
                     variant="outlined"
                     density="comfortable"
                     prepend-inner-icon="mdi-github"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+
+                <!-- Discord (Opcional - Lado direito) -->
+                <v-col cols="12" md="6" class="pa-0 pl-md-2 mb-4">
+                  <div class="d-flex align-center mb-1">
+                    <label class="text-caption font-weight-medium text-grey-darken-3">Discord</label>
+                    <span class="text-caption text-grey ml-1">(Opcional)</span>
+                    <v-icon size="16" class="text-grey ml-1" title="Digite apenas o seu nome de usuário">mdi-information-outline</v-icon>
+                  </div>
                   <v-text-field
                     v-model="applicant.discord"
-                    label="Discord (Opcional)"
                     placeholder="Nome de Usuário"
                     variant="outlined"
                     density="comfortable"
                     prepend-inner-icon="mdi-discord"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
               </v-row>
               
 
-              <!-- 5. Indicação -->
+             <!-- 5. Indicação -->
               <p class="text-body-2 font-weight-bold mb-2 mt-2">5. Indicação</p>
               <p class="text-caption text-medium-emphasis mb-3">Você foi indicado(a) por alguém da SouJunior?</p>
 
@@ -286,33 +322,52 @@
                 <v-btn value="nao" variant="outlined" size="small" color="primary">Não</v-btn>
               </v-btn-toggle>
 
-              <v-row v-if="applicant.was_referred === 'sim'" class="mt-0">
-                <v-col cols="12">
+              <v-row v-if="applicant.was_referred === 'sim'" class="ma-0 mt-2">
+                <!-- Nome da pessoa (Ocupa a linha toda) -->
+                <v-col cols="12" class="pa-0 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    Nome da pessoa <span class="text-red">*</span>
+                  </label>
                   <v-text-field
                     v-model="applicant.referred_by_name"
-                    label="Nome da pessoa *"
+                    placeholder="Nome completo da pessoa que te indicou"
                     variant="outlined"
                     density="comfortable"
                     :rules="[(v) => !!v || 'Nome é obrigatório']"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+
+                <!-- Cargo (Lado esquerdo) -->
+                <v-col cols="12" md="6" class="pa-0 pr-md-2 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    Cargo <span class="text-red">*</span>
+                  </label>
                   <v-text-field
                     v-model="applicant.referred_by_position"
-                    label="Cargo *"
+                    placeholder="Ex: Desenvolvedor Front-end"
                     variant="outlined"
                     density="comfortable"
                     :rules="[(v) => !!v || 'Cargo da indicação é obrigatório']"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
-                <v-col cols="12" md="6">
+
+                <!-- LinkedIn da indicação (Lado direito) -->
+                <v-col cols="12" md="6" class="pa-0 pl-md-2 mb-4">
+                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                    LinkedIn da indicação <span class="text-red">*</span>
+                  </label>
                   <v-text-field
                     v-model="applicant.referred_by_linkedin"
-                    label="LinkedIn da indicação *"
                     placeholder="https://linkedin.com/in/..."
                     variant="outlined"
                     density="comfortable"
                     :rules="linkedinRules"
+                    validate-on="lazy submit"
+                    hide-details="auto"
                   />
                 </v-col>
               </v-row>
@@ -994,5 +1049,17 @@ function toggleDark() {
     line-height: 34px !important;
     letter-spacing: -0.5px !important;
   }
+}
+
+/* Remove o container de detalhes/mensagens se ele estiver vazio (sem erro) */
+:deep(.v-input__details:not(:has(.v-messages__message))) {
+  display: none !important;
+}
+
+/* Ajusta os espaçamentos internos para o erro alinhar perfeitamente quando aparecer */
+:deep(.v-input__details) {
+  padding-inline: 0 !important;
+  min-height: auto !important;
+  padding-top: 4px !important;
 }
 </style>
