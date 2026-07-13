@@ -146,7 +146,6 @@ const benefits = ref([
   line-height: 1.25;
 }
 
-/* Aumentamos a especificidade combinando classes para zerar o min-h do Vuetify sem usar !important */
 .v-list-item.min-h-auto {
   min-height: unset;
 }
