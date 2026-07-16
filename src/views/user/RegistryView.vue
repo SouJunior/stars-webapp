@@ -49,15 +49,15 @@
     
     <v-card variant="flat" class="overflow-hidden bg-transparent">
       <v-card-text class="pa-4 pa-md-8">
-        <h2 class="text-h4 font-weight-bold text-primary mb-6" style="font-family: sans-serif;">
+        <h2 class="text-h4 registry-form-title text-primary mb-6">
           Cadastro de voluntário
         </h2>
             <v-alert
             variant="flat"
-            color="red-lighten-4"
+            color="transparent"
             icon="mdi-alert-circle-outline"
             density="compact"
-            class="mb-6 text-caption text-red-darken-4 border-sm border-red rounded-lg font-weight-medium"
+            class="mb-6 text-caption required-fields-alert rounded-lg font-weight-medium"
           >
             Campos de preenchimento obrigatório (<span class="asterisco">*</span>)
           </v-alert>
@@ -66,7 +66,7 @@
 
               <!-- 1. Tipo de Voluntário -->
           <div class="mb-6">
-            <p class="text-body-2 font-weight-bold mb-2">
+            <p class="text-body-2 registry-section-title mb-2">
               1. Tipo de voluntário <span class="asterisco">*</span>
             </p>
             <v-select
@@ -203,7 +203,7 @@
               
               <v-row class="ma-0">
                 <v-col cols="12" class="pa-0 mb-4">
-                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                  <label class="text-caption registry-field-label d-block mb-1">
                     Nome Completo <span class="text-red">*</span>
                   </label>
                   <v-text-field 
@@ -218,7 +218,7 @@
                 </v-col>
 
                 <v-col cols="12" md="6" class="pa-0 pr-md-2 mb-4">
-                  <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+                  <label class="text-caption registry-field-label d-block mb-1">
                     Email <span class="text-red">*</span>
                   </label>
                   <v-text-field 
@@ -373,52 +373,50 @@
               </v-row>
 
               <div class="registration-footer-container ml-0">
-              <!-- Terms checkbox box -->
-              <div class="terms-box-wrapper mb-4">
-              <v-checkbox
-                v-model="applicant.terms"
-                color="primary"
-                hide-details
-                class="terms-checkbox px-4 py-2"
-              >
-                <template #label>
-                  <span class="text-body-2 text-terms-responsive">
-                    Eu aceito e concordo com os termos de condições 
-                    <a
-                      href="#"
-                      class="text-primary font-weight-bold text-decoration-none ml-1"
-                      @click.prevent.stop="dialogTerms = true"
-                    >
-                      Termos e condições *
-                    </a>
-                  </span>
-                </template>
-              </v-checkbox>
-            </div>
+                <div class="terms-box-wrapper mb-4">
+                  <v-checkbox
+                    v-model="applicant.terms"
+                    hide-details
+                    class="terms-checkbox px-4 py-2"
+                  >
+                    <template #label>
+                      <span class="text-body-2 text-terms-responsive terms-label">
+                        Eu aceito e concordo com os termos de condições 
+                        <a
+                          href="#"
+                          class="text-primary font-weight-bold text-decoration-none ml-1"
+                          @click.prevent.stop="dialogTerms = true"
+                        >
+                          Termos e condições *
+                        </a>
+                      </span>
+                    </template>
+                  </v-checkbox>
+                </div>
 
-              <!-- Action buttons row -->
-              <div class="d-flex justify-space-between align-center" style="gap: 16px;">
-                <v-btn
-                  variant="outlined"
-                  color="grey-darken-1"
-                  size="large"
-                  class="action-btn text-none"
-                  @click="dialogCancel = true"
-                >
-                  Cancelar
-                </v-btn>
-                <v-btn
-                  color="primary"
-                  size="large"
-                  elevation="0"
-                  class="action-btn text-none"
-                  :loading="loading"
-                  @click="submitApplicant"
-                >
-                  Cadastrar
-                </v-btn>
+                <div class="action-buttons-row">
+                  <v-btn
+                    variant="outlined"
+                    color="grey-darken-1"
+                    size="large"
+                    class="action-btn text-none"
+                    @click="dialogCancel = true"
+                  >
+                    Cancelar
+                  </v-btn>
+                  <v-btn
+                    variant="elevated"
+                    color="primary"
+                    size="large"
+                    class="action-btn text-none cta-btn"
+                    :loading="loading"
+                    :disabled="!applicant.terms"
+                    @click="submitApplicant"
+                  >
+                    Cadastrar
+                  </v-btn>
+                </div>
               </div>
-            </div>
 
             </v-form>
           </v-card-text>
@@ -856,6 +854,7 @@ function toggleDark() {
 /* Container principal precisa de position relative para ancorar o mascote */
 .container-principal {
   position: relative;
+  font-family: 'Funnel Sans', sans-serif !important;
 }
 
 /* Posicionamento do Mascote */
@@ -936,16 +935,161 @@ function toggleDark() {
 
 .registration-footer-container {
   width: 100%;
-  max-width: 640px; 
   margin-left: 0 !important;
-  margin-right: auto;
+  margin-right: 0 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-/* Fundo inteligente: usa uma cor base do Vuetify que se adapta ao tema */
+/* Fundo do bloco de termos e ações */
 .terms-box-wrapper {
-  background-color: rgba(var(--v-theme-primary), 0.12); /* Cria um tom azul claro no Light e um azul sutil no Dark */
-  border-radius: 8px;
+  background-color: #E8F2FF;
+  border: 1px solid rgba(59, 126, 249, 0.18);
+  border-radius: 16px;
   width: 100%;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+}
+
+.terms-checkbox {
+  width: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.terms-checkbox :deep(.v-selection-control) {
+  width: 100%;
+  padding: 0 !important;
+  min-height: 0 !important;
+  align-items: center !important;
+}
+
+.terms-checkbox :deep(.v-selection-control__input) {
+  border-color: #3C7EF9 !important;
+  background-color: #ffffff !important;
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.terms-checkbox :deep(.v-selection-control__ripple) {
+  width: 20px !important;
+  height: 20px !important;
+}
+
+.terms-checkbox :deep(.v-icon) {
+  color: #3C7EF9 !important;
+  font-size: 16px !important;
+}
+
+.terms-checkbox :deep(.v-selection-control__label) {
+  margin: 0 !important;
+  line-height: 1.3 !important;
+  color: #475569 !important;
+}
+
+:deep(.theme--dark) .terms-box-wrapper,
+:deep(.v-theme--dark) .terms-box-wrapper {
+  background-color: rgba(59, 126, 249, 0.16) !important;
+  border-color: rgba(96, 165, 250, 0.28) !important;
+}
+
+:deep(.theme--dark) .terms-label,
+:deep(.v-theme--dark) .terms-label,
+:deep(.theme--dark) .terms-checkbox :deep(.v-selection-control__label),
+:deep(.v-theme--dark) .terms-checkbox :deep(.v-selection-control__label) {
+  color: #EFF6FF !important;
+}
+
+:deep(.theme--dark) .terms-checkbox :deep(.v-selection-control__input),
+:deep(.v-theme--dark) .terms-checkbox :deep(.v-selection-control__input) {
+  border-color: #93C5FD !important;
+  background-color: #0F172A !important;
+}
+
+:deep(.theme--dark) .terms-checkbox :deep(.v-icon),
+:deep(.v-theme--dark) .terms-checkbox :deep(.v-icon) {
+  color: #93C5FD !important;
+}
+
+.terms-label {
+  font-family: 'Funnel Sans', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  line-height: 20px !important;
+  color: #475569 !important;
+}
+
+.action-buttons-row {
+  display: flex;
+  gap: 16px;
+  width: 100%;
+}
+
+.action-btn {
+  flex: 1;
+  min-height: 44px !important;
+  height: 44px !important;
+  padding: 0 22px !important;
+  border-radius: 12px !important;
+  font-family: 'Funnel Sans', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  line-height: 44px !important;
+}
+
+.cta-btn {
+  min-height: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+}
+
+.cta-btn:not(:disabled) {
+  background-color: #3C7EF9 !important;
+  color: #ffffff !important;
+}
+
+.cta-btn:disabled {
+  background-color: rgba(59, 126, 249, 0.18) !important;
+  color: rgba(15, 23, 42, 0.4) !important;
+}
+
+.v-btn--variant-outlined.action-btn {
+  background-color: #ffffff !important;
+  border-color: rgba(148, 163, 184, 0.3) !important;
+}
+
+.required-fields-alert {
+  background-color: rgba(253, 218, 187, 0.5);
+  border: 1px solid #F6AF71;
+  color: #422C18;
+}
+
+.registry-form-title {
+  font-family: 'Funnel Sans', sans-serif !important;
+  font-size: 28px !important;
+  font-weight: 600 !important;
+  line-height: 32px !important;
+}
+
+.registry-section-title {
+  font-family: 'Funnel Sans', sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  line-height: 24px !important;
+}
+
+.registry-field-label,
+.registration-footer-container .text-caption,
+.terms-label {
+  font-family: 'Funnel Sans', sans-serif !important;
+}
+
+.registry-field-label {
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 16px !important;
 }
 
 /* Ajuste para o texto dos termos quebrar linha no mobile corretamente */
@@ -966,22 +1110,24 @@ function toggleDark() {
   line-height: 1.4;
 }
 
-/* Garante o alinhamento vertical perfeito do box com o texto no PC e Mobile */
-.terms-checkbox :deep(.v-selection-control) {
-  align-items: center !important;
-}
-
-.terms-checkbox :deep(.v-label) {
-  opacity: 1 !important;
+.required-fields-alert {
+  background-color: rgba(253, 218, 187, 0.5);
+  border: 1px solid #F6AF71;
+  color: #422C18;
 }
 
 /* Botões do Rodapé */
 .action-btn {
   flex: 1;
-  height: 48px !important;
-  border-radius: 8px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
   font-weight: 600;
   letter-spacing: 0;
+}
+
+.cta-btn {
+  min-height: 44px !important;
+  border-radius: 12px !important;
 }
 
 .v-btn--variant-outlined {
@@ -1045,10 +1191,20 @@ function toggleDark() {
   }
 
   .titulo-banner {
+    font-family: 'Funnel Display', sans-serif !important;
     font-size: 28px !important;
     line-height: 34px !important;
     letter-spacing: -0.5px !important;
+    font-weight: 700 !important;
   }
+}
+
+.titulo-banner {
+  font-family: 'Funnel Display', sans-serif !important;
+  font-size: 51px !important;
+  line-height: 56px !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.5px !important;
 }
 
 /* Remove o container de detalhes/mensagens se ele estiver vazio (sem erro) */

@@ -385,7 +385,7 @@ function toggleDark() {
 }
 
 .logo-brand-text {
-  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif !important;
+  font-family: 'Funnel Display', sans-serif !important;
   font-weight: 400 !important; /* Peso normal do protótipo */
   font-size: 22px !important;   /* Tamanho alinhado com o ícone */
   letter-spacing: -0.3px;
