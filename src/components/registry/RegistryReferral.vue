@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-body-2 font-weight-bold mb-2 mt-2">5. Indicação</p>
+    <p class="text-body-1 font-weight-bold mb-2 mt-2">5. Indicação</p>
     <p class="text-caption text-medium-emphasis mb-3">
       Você foi indicado(a) por alguém da SouJunior?
     </p>

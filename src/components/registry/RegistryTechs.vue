@@ -14,8 +14,8 @@
         :value="tech"
         density="comfortable"
         hide-details
-        class="mb-1 text-body-1 font-weight-medium"
-        color="primary"
+        class="mb-1 text-body-1 font-weight-medium checkbox-azul"
+        color="#0066FF"
         @update:model-value="$emit('update:frontend', $event)"
       />
 
@@ -26,7 +26,7 @@
         variant="outlined"
         density="comfortable"
         maxlength="100"
-        class="mt-4 mb-6 text-body-1 rounded-lg"
+        class="mt-4 mb-6 text-body-1 rounded-lg checkbox-azul"
         hide-details="auto"
         :rules="[(v) => !!v || 'Por favor, especifique as tecnologias front-end']"
         @update:model-value="$emit('update:frontendOutros', $event)"
@@ -52,8 +52,8 @@
         :value="tech"
         density="comfortable"
         hide-details
-        class="mb-1 text-body-1 font-weight-medium"
-        color="primary"
+        class="mb-1 text-body-1 font-weight-medium checkbox-azul"
+        color="#0066FF"
         @update:model-value="$emit('update:backend', $event)"
       />
 
@@ -64,7 +64,7 @@
         variant="outlined"
         density="comfortable"
         maxlength="100"
-        class="mt-4 mb-6 text-body-1 rounded-lg"
+        class="mt-4 mb-6 text-body-1 rounded-lg checkbox-azul"
         hide-details="auto"
         :rules="[(v) => !!v || 'Por favor, especifique as tecnologias back-end']"
         @update:model-value="$emit('update:backendOutros', $event)"
@@ -95,3 +95,10 @@ defineProps({
 
 defineEmits(['update:frontend', 'update:frontendOutros', 'update:backend', 'update:backendOutros'])
 </script>
+
+<style scoped>
+.checkbox-azul :deep(.v-selection-control__input > .v-icon) {
+  color: #0066FF;
+  opacity: 0.5;
+}
+</style>

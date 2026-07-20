@@ -1,7 +1,7 @@
 <template>
   <div class="mb-6">
     <div class="d-flex justify-space-between align-baseline mb-3">
-      <p class="text-body-2 font-weight-bold mb-0">
+      <p class="text-body-1 font-weight-bold mb-0">
         2. Área de Atuação <span class="asterisco">*</span>
       </p>
       <span class="text-body-2 text-grey-darken-1">Selecione até 3 áreas</span>

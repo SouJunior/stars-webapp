@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-body-2 font-weight-bold mb-4 mt-2">4. Perfil Profissional</p>
+    <p class="text-body-1 font-weight-bold mb-4 mt-2">4. Perfil Profissional</p>
 
     <v-row class="ma-0">
       <v-col cols="12" class="pa-0 mb-4">

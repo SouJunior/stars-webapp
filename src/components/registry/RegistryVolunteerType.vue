@@ -1,6 +1,6 @@
 <template>
   <div class="mb-6">
-    <p class="text-body-2 registry-section-title mb-2">
+    <p class="text-body-1 registry-section-title mb-2">
       1. Tipo de voluntário <span class="asterisco">*</span>
     </p>
     <v-select

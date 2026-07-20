@@ -5,7 +5,7 @@
 
       <v-alert
         variant="flat"
-        color="transparent"
+        color="warning"
         icon="mdi-alert-circle-outline"
         density="compact"
         class="mb-6 text-caption required-fields-alert rounded-lg font-weight-medium"

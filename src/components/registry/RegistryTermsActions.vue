@@ -60,8 +60,8 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
 }
 
 .terms-box-wrapper {
-  background-color: #e8f2ff;
-  border: 1px solid rgba(59, 126, 249, 0.18);
+  background-color: rgba(var(--v-theme-primary), 0.08);
+  border: 1px solid rgba(var(--v-theme-primary), 0.24);
   border-radius: 16px;
   width: 100%;
   padding: 8px 14px;
@@ -78,32 +78,31 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
 /* Vuetify selection control overrides */
 .terms-checkbox :deep(.v-selection-control) {
   width: 100%;
-  padding: 0 !important;
-  min-height: 0 !important;
-  align-items: center !important;
+  padding: 0;
+  min-height: 0;
+  align-items: center;
 }
 
 .terms-checkbox :deep(.v-selection-control__input) {
-  border-color: #3c7ef9 !important;
-  background-color: #ffffff !important;
-  width: 20px !important;
-  height: 20px !important;
+  border-color: rgb(var(--v-theme-primary));
+  width: 20px;
+  height: 20px;
 }
 
 .terms-checkbox :deep(.v-selection-control__ripple) {
-  width: 20px !important;
-  height: 20px !important;
+  width: 20px;
+  height: 20px;
 }
 
 .terms-checkbox :deep(.v-icon) {
-  color: #3c7ef9 !important;
-  font-size: 16px !important;
+  color: rgb(var(--v-theme-primary));
+  font-size: 16px;
 }
 
 .terms-checkbox :deep(.v-selection-control__label) {
-  margin: 0 !important;
-  line-height: 1.3 !important;
-  color: #475569 !important;
+  margin: 0;
+  line-height: 1.3;
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .terms-label {
@@ -111,7 +110,7 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
-  color: #475569;
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .text-terms-responsive {
@@ -142,34 +141,13 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
 
 /* Vuetify btn size overrides */
 .action-btn {
-  min-height: 44px !important;
-  height: 44px !important;
-  border-radius: 12px !important;
+  min-height: 44px;
+  height: 44px ;
+  border-radius: 12px ;
 }
 
 .cta-btn:not(:disabled) {
-  background-color: #3c7ef9 !important;
-  color: #ffffff !important;
-}
-
-.cta-btn:disabled {
-  background-color: rgba(59, 126, 249, 0.18) !important;
-  color: rgba(15, 23, 42, 0.4) !important;
-}
-
-.v-btn--variant-outlined.action-btn {
-  background-color: #ffffff !important;
-  border-color: rgba(148, 163, 184, 0.3) !important;
-}
-
-:deep(.v-theme--myDarkTheme) .terms-box-wrapper,
-:deep(.v-theme--dark) .terms-box-wrapper {
-  background-color: rgba(59, 126, 249, 0.16);
-  border-color: rgba(96, 165, 250, 0.28);
-}
-
-:deep(.v-theme--myDarkTheme) .terms-label,
-:deep(.v-theme--dark) .terms-label {
-  color: #eff6ff;
+  background-color: #3c7ef9;
+  color: #ffffff;
 }
 </style>

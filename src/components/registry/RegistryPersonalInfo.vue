@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="text-body-2 font-weight-bold mb-4">
+    <p class="text-body-1 font-weight-bold mb-4">
       3. Informações Pessoais <span class="asterisco">*</span>
     </p>
 
