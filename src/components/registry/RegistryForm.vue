@@ -9,6 +9,7 @@
         icon="mdi-alert-circle-outline"
         density="compact"
         class="mb-6 text-caption required-fields-alert rounded-lg font-weight-medium"
+        :class="{ 'theme-dark': isDark }"
       >
         Campos de preenchimento obrigatório (<span class="asterisco">*</span>)
       </v-alert>
@@ -19,7 +20,7 @@
           @update:model-value="applicant.jobtitle_id = $event"
         />
 
-        <v-divider class="site-divider my-6" />
+        <v-divider class="site-divider my-5" />
 
         <RegistryAreas
           :areas="filteredAreas"
@@ -28,7 +29,7 @@
           @toggle="$emit('toggle-area', $event)"
         />
 
-        <v-divider class="site-divider my-6" />
+        <v-divider class="site-divider my-5" />
 
         <RegistryTechs
           :show-frontend="applicant.vertical_ids.includes('Front-end')"
@@ -89,6 +90,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
+import { useTheme } from 'vuetify'
 import { getAreasForJobtitle } from './constants.js'
 import {
   isAreasInvalid,
@@ -112,6 +114,9 @@ const props = defineProps({
 defineEmits(['submit', 'cancel', 'open-terms', 'toggle-area'])
 
 const form = ref(null)
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
 
 const filteredAreas = computed(() => getAreasForJobtitle(props.applicant.jobtitle_id))
 const areasInvalid = computed(() => isAreasInvalid(props.applicant))
@@ -143,6 +148,15 @@ defineExpose({
   opacity: 1;
 }
 
+.theme-dark.required-fields-alert {
+  background-color: #2E1E0E;
+  border: 1px solid #F0984B;
+}
+
+.theme-dark.required-fields-alert :deep(.v-alert__prepend .v-icon) {
+  color: #F0984B !important;
+}
+
 .asterisco {
   color: rgb(var(--v-theme-error));
   font-weight: bold;
@@ -164,5 +178,15 @@ defineExpose({
   padding-inline: 0 !important;
   min-height: auto !important;
   padding-top: 4px !important;
+}
+</style>
+
+<style>
+.v-theme--dark .v-field {
+  background-color: #1E2235;
+}
+
+.v-theme--dark .v-field__outline {
+  --v-field-border-color: #3D4570;
 }
 </style>

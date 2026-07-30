@@ -38,7 +38,7 @@
       </v-col>
 
       <v-col cols="12" md="6" class="pa-0 pl-md-2 mb-4">
-        <label class="text-caption font-weight-medium text-grey-darken-3 d-block mb-1">
+        <label class="text-caption font-weight-medium registry-field-label d-block mb-1">
           WhatsApp <span class="text-red">*</span>
         </label>
         <v-text-field
@@ -79,6 +79,7 @@ function onPhoneInput(value) {
   font-size: 14px;
   font-weight: 400;
   line-height: 16px;
+  color: rgb(var(--v-theme-on-surface));
 }
 
 .asterisco {

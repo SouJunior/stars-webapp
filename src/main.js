@@ -15,7 +15,7 @@ import '@fortawesome/fontawesome-free/css/all.css'
 import '@/assets/main.scss'
 import VueGtag from 'vue-gtag'
 
-const savedTheme = localStorage.getItem('theme') || 'dark'
+const savedTheme = localStorage.getItem('theme') || 'light'
 
 const vuetify = createVuetify({
   components,
@@ -45,7 +45,7 @@ const vuetify = createVuetify({
       dark: true,
       colors: {
         primary: '#60a5fa',
-        background: '#0f172a',
+        background: '#1A1D27',
         surface: '#1e293b',
         warning: '#1e293b'
       }

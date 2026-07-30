@@ -1,7 +1,7 @@
 <template>
   <div class="registration-footer-container">
-    <div class="terms-box-wrapper mb-4">
-      <v-checkbox :model-value="terms" hide-details class="terms-checkbox px-4 py-2" @update:model-value="$emit('update:terms', $event)">
+    <div class="terms-box-wrapper" :class="{ 'theme-dark': isDark }">
+      <v-checkbox :model-value="terms" hide-details class="terms-checkbox py-2" color="#3C7EF9" @update:model-value="$emit('update:terms', $event)">
         <template #label>
           <span class="text-body-2 text-terms-responsive terms-label">
             Eu aceito e concordo com os termos de condições
@@ -10,7 +10,7 @@
               class="text-primary font-weight-bold text-decoration-none ml-1"
               @click.prevent.stop="$emit('open-terms')"
             >
-              Termos e condições *
+              Termos e condições <span class="text-red">*</span>
             </a>
           </span>
         </template>
@@ -43,6 +43,12 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+import { useTheme } from 'vuetify'
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
+
 defineProps({
   terms: { type: Boolean, default: false },
   loading: { type: Boolean, default: false }
@@ -56,7 +62,8 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 18px;
+  margin-bottom: 28px;
 }
 
 .terms-box-wrapper {
@@ -64,7 +71,7 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
   border: 1px solid rgba(var(--v-theme-primary), 0.24);
   border-radius: 16px;
   width: 100%;
-  padding: 8px 14px;
+  padding: 8px 16px;
   display: flex;
   align-items: center;
 }
@@ -84,25 +91,64 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
 }
 
 .terms-checkbox :deep(.v-selection-control__input) {
-  border-color: rgb(var(--v-theme-primary));
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #137FEC;
+  border-radius: 5px;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  position: relative;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .terms-checkbox :deep(.v-selection-control__ripple) {
-  width: 20px;
-  height: 20px;
+  display: none;
 }
 
-.terms-checkbox :deep(.v-icon) {
-  color: rgb(var(--v-theme-primary));
-  font-size: 16px;
+.terms-checkbox :deep(.v-selection-control__input .v-icon),
+.terms-checkbox :deep(.v-selection-control__input svg) {
+  display: none;
 }
 
 .terms-checkbox :deep(.v-selection-control__label) {
   margin: 0;
   line-height: 1.3;
   color: rgb(var(--v-theme-on-surface));
+}
+
+.terms-checkbox :deep(.v-selection-control__input::after) {
+  content: "";
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  width: 7px;
+  height: 12px;
+  border: solid #ffffff;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -60%) rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  pointer-events: none;
+}
+
+.terms-checkbox :deep(.v-selection-control--dirty .v-selection-control__input) {
+  background-color: #3C7EF9;
+  border-color: #3C7EF9;
+}
+
+.terms-checkbox :deep(.v-selection-control--dirty .v-selection-control__input::after) {
+  opacity: 1;
+}
+
+.terms-checkbox :deep(.v-selection-control__input input) {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.terms-checkbox,
+.terms-checkbox :deep(.v-label) {
+  cursor: pointer;
 }
 
 .terms-label {
@@ -149,5 +195,10 @@ defineEmits(['update:terms', 'open-terms', 'cancel', 'submit'])
 .cta-btn:not(:disabled) {
   background-color: #3c7ef9;
   color: #ffffff;
+}
+
+.theme-dark :deep(.terms-checkbox .v-selection-control__input) {
+  background-color: transparent;
+  border-color: #3D4570;
 }
 </style>

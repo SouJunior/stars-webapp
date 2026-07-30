@@ -1,5 +1,8 @@
 <template>
-  <div class="banner-principal py-6 py-md-12 px-4 text-center w-100 mt-n16 position-relative overflow-hidden">
+    <div
+      class="banner-principal py-6 py-md-12 px-4 text-center w-100 mt-n16 position-relative overflow-hidden"
+      :style="bannerStyle"
+    >
     <img
       src="@/assets/banner-quadrado-transparente.png"
       alt=""
@@ -23,15 +26,25 @@
   </div>
 </template>
 
-<style scoped>
-.banner-principal {
-  background: linear-gradient(135deg, #3c7ef9 0%, #1f4fde 100%);
-}
+<script setup>
+import { computed } from 'vue'
+import { useTheme } from 'vuetify'
 
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
+const bannerStyle = computed(() => ({
+  background: isDark.value
+    ? '#1A2550'
+    : 'linear-gradient(135deg, #3c7ef9 0%, #1f4fde 100%)'
+}))
+</script>
+
+<style scoped>
 .banner-pattern {
   position: absolute;
-  height: 100%;
-  opacity: 0.75;
+  width: 326px;
+  height: 326px;
+  opacity: 0.5;
   pointer-events: none;
 }
 
