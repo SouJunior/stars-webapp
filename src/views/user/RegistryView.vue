@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="pa-0 registration-page-background">
+   <v-container fluid class="pa-0 registration-page-background" :style="containerStyle">
     <RegistryBanner />
 
     <v-row align="center" justify="center" class="ma-0 mt-6">
@@ -28,13 +28,14 @@
       @reset="resetForm"
     />
   </v-container>
-  <footer class="footer-gradiente"></footer>
+  <footer class="footer-gradiente" :class="{ 'theme-dark': isDark }"></footer>
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { event } from 'vue-gtag'
+import { useTheme } from 'vuetify'
 import { useVolunteerStore } from '@/stores/volunteer.js'
 import { useVolunteerTypeStore } from '@/stores/volunteerType.js'
 import { useSnackbarStore } from '@/stores/snackbar.js'
@@ -61,6 +62,21 @@ const dialogSuccess = ref(false)
 const attemptedSubmit = ref(false)
 
 const applicant = reactive(createEmptyApplicant())
+
+watch(() => applicant.jobtitle_id, () => {
+  applicant.vertical_ids = []
+  applicant.techs_frontend = []
+  applicant.techs_frontend_outros = ''
+  applicant.techs_backend = []
+  applicant.techs_backend_outros = ''
+  attemptedSubmit.value = false
+})
+
+const theme = useTheme()
+const isDark = computed(() => theme.global.name.value === 'myDarkTheme')
+const containerStyle = computed(() => ({
+  backgroundColor: theme.current.value.colors.background
+}))
 
 function onToggleArea(area) {
   toggleAreaSelection(applicant, area)
@@ -123,7 +139,6 @@ async function submitApplicant() {
 
 <style scoped>
 .registration-page-background {
-  background-color: rgb(var(--v-theme-background));
   min-height: 100vh;
   padding: 24px 16px;
 }
@@ -140,5 +155,9 @@ async function submitApplicant() {
   margin-top: -20px;
   padding: 40px 0;
   background: linear-gradient(90deg, #1e3a8a 0%, #3b82f6 50%, #2563eb 100%);
+}
+
+.theme-dark.footer-gradiente {
+  background: #1A2550;
 }
 </style>
