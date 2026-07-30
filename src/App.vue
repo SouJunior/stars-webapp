@@ -53,7 +53,7 @@
     <v-app-bar
       v-if="route.name !== 'public-profile' && route.name !== 'certificate'"
       class="header px-4"
-      color="transparent"
+      color="surface"
       app
       elevation="4"
     >

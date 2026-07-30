@@ -4,7 +4,9 @@
       <p class="text-body-1 font-weight-bold mb-0">
         2. Área de Atuação <span class="asterisco">*</span>
       </p>
-      <span class="text-body-2 text-grey-darken-1">Selecione até 3 áreas</span>
+      <span class="text-body-2 text-grey-darken-1">
+        {{ selected.length ? `${selected.length}/${maxAreas}` : `Selecione até ${maxAreas} áreas` }}
+      </span>
     </div>
 
     <div class="areas-container">
@@ -14,8 +16,9 @@
         :color="selected.includes(area) ? 'primary' : 'grey-lighten-1'"
         :variant="selected.includes(area) ? 'flat' : 'outlined'"
         class="custom-chip"
-        :class="{ 'text-grey-darken-3': !selected.includes(area) }"
-        @click="$emit('toggle', area)"
+        :class="chipClasses(area)"
+        :disabled="!selected.includes(area) && isMaxReached"
+        @click="onToggle(area)"
       >
         {{ area }}
       </v-chip>
@@ -28,13 +31,30 @@
 </template>
 
 <script setup>
-defineProps({
+import { computed } from 'vue'
+
+const props = defineProps({
   areas: { type: Array, required: true },
   selected: { type: Array, required: true },
-  showError: { type: Boolean, default: false }
+  showError: { type: Boolean, default: false },
+  maxAreas: { type: Number, default: 3 }
 })
 
-defineEmits(['toggle'])
+const emit = defineEmits(['toggle'])
+
+const isMaxReached = computed(() => props.selected.length >= props.maxAreas)
+
+function chipClasses(area) {
+  return {
+    'text-grey-darken-3': !props.selected.includes(area),
+    'chip-disabled': !props.selected.includes(area) && isMaxReached.value
+  }
+}
+
+function onToggle(area) {
+  if (!props.selected.includes(area) && isMaxReached.value) return
+  emit('toggle', area)
+}
 </script>
 
 <style scoped>
@@ -58,11 +78,18 @@ defineEmits(['toggle'])
   font-family: 'Funnel Sans', sans-serif !important;
   font-size: 14px !important;
   font-weight: 400 !important;
-  line-height: 16px !important;
+
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+:deep(.custom-chip:not(.chip-disabled):hover) {
+  border-color: rgb(var(--v-theme-primary)) !important;
+  box-shadow: 0 0 10px rgba(var(--v-theme-primary), 0.35);
 }
 
 :deep(.custom-chip .v-chip__content) {
   white-space: nowrap;
+  line-height: 16px !important;
 }
 
 :deep(.v-chip) {
@@ -72,5 +99,11 @@ defineEmits(['toggle'])
 :deep(.v-chip__content) {
   color: rgba(var(--v-theme-on-surface), 0.87) !important;
   font-weight: 500;
+}
+
+.chip-disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  filter: grayscale(0.5);
 }
 </style>
