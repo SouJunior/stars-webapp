@@ -4,7 +4,7 @@
       <v-card class="login-form secondary">
         <p>Nova Senha</p>
         <hr class="mt-1 mb-8" />
-        <v-form @submit.prevent="handleSubmit" v-if="!success">
+        <v-form v-if="!success" @submit.prevent="handleSubmit">
           <v-text-field
             v-model="password"
             :append-inner-icon="visible ? 'mdi-eye' : 'mdi-eye-off'"
@@ -12,8 +12,8 @@
             variant="outlined"
             :rules="passwordRules"
             label="Nova Senha"
-            @click:append-inner="visible = !visible"
             class="mb-2"
+            @click:append-inner="visible = !visible"
           />
           <v-text-field
             v-model="confirmPassword"

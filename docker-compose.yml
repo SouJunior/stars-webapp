@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  stars-frontend:
+    build: .
+    container_name: stars-frontend-local
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules

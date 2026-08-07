@@ -13,7 +13,6 @@ dist
 dist-ssr
 coverage
 *.local
-
 /cypress/videos/
 /cypress/screenshots/
 
@@ -26,3 +25,9 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+# Arquivos de Ambiente / Variáveis Secretas (CRÍTICO)
+.env
+.env.local
+.env.*.local
+.vercel
