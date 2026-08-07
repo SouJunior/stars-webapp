@@ -43,7 +43,7 @@ const bannerStyle = computed(() => ({
 .banner-pattern {
   position: absolute;
   width: 326px;
-  height: 326px;
+  height: 326;
   opacity: 0.5;
   pointer-events: none;
 }
