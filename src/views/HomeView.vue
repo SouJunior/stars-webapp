@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <v-container class="home-page d-flex flex-column">
     <v-container class="hero-section">
       <div>
@@ -693,4 +693,14 @@ hr {
     transition: ease-in-out 0.2s;
   }
 }
-</style>
+</style> -->
+<template>
+  <HomeHero />
+  <HomeNumbers />
+</template>
+
+<script setup>
+// Importa o componente que você acabou de criar
+import HomeHero from '@/components/homepage/HomeHero.vue'
+import HomeNumbers from '@/components/homepage/HomeNumbers.vue'
+</script>
