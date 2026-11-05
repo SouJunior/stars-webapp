@@ -59,7 +59,6 @@
     >
       <div class="w-100 d-flex align-center justify-space-between main-container">
         <div class="d-flex align-center">
-          <!-- AS 3 BARRINHAS: Agora só aparecem se NÃO for o fluxo de registro -->
           <v-app-bar-nav-icon 
             v-if="!isRegistryFlow" 
             class="d-md-none" 
@@ -244,7 +243,7 @@
     <transition name="fade" mode="out-in">
       <v-main
         :style="
-          route.name !== 'public-profile' && route.name !== 'certificate'
+          route.name !== 'home' && route.name !== 'public-profile' && route.name !== 'certificate'
             ? 'margin-top: 64px'
             : ''
         "
